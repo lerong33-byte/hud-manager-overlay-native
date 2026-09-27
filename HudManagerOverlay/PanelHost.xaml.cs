@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Interop;
@@ -17,6 +18,12 @@ public partial class PanelHost : Window
     // overflows its panel's bounds flips click-through mid-interaction and flickers the window.
     // Margin is 0 while click-through so idle game clicks are never stolen.
     private const double EdgeMarginDip = 40;
+
+    [StructLayout(LayoutKind.Sequential)]
+    private struct POINT { public int X, Y; }
+
+    [DllImport("user32.dll")]
+    private static extern bool GetCursorPos(out POINT p);
 
     private readonly DispatcherTimer _poll = new() { Interval = TimeSpan.FromMilliseconds(50) };
     private bool _interactive;
@@ -73,7 +80,13 @@ public partial class PanelHost : Window
     {
         if (PanelCanvas.Children.Count == 0) { Hide(); return; }
 
-        var pos = System.Windows.Forms.Cursor.Position; // screen pixels
+        // NOT System.Windows.Forms.Cursor.Position — confirmed live in a hybrid WPF+WinForms app
+        // (this one, for the tray icon) that it reports coordinates scaled ~1.25x relative to
+        // true physical pixels, while WPF's own PointToScreen (used below) reports true physical
+        // pixels. Comparing the two directly meant this hit-test NEVER matched, at any position,
+        // even with exact bounds confirmed. Raw GetCursorPos matches PointToScreen's space.
+        GetCursorPos(out var cursor);
+        var pos = new System.Drawing.Point(cursor.X, cursor.Y);
         var margin = _interactive ? EdgeMarginDip : 0;
         bool nearAny = false;
 

@@ -27,6 +27,14 @@ internal static class ScreenHelper
     // panel-host/click-through work can be verified now; whoever picks this up next should
     // delete EnvironmentScaleFactor and re-test on a real machine before shipping — if DPI APIs
     // behave normally there (as they should), this whole override should come out.
+    //
+    // Downstream effect (2026-09-27): simulated mouse clicks on rendered controls (e.g. the tool
+    // rail's buttons) miss their target in this environment even when SetCursorPos matches the
+    // measured on-screen bounds exactly (confirmed via PointToScreen) — WPF's own hit-testing
+    // likely applies a DIFFERENT effective transform than this calibration compensates for.
+    // Keyboard-driven interaction (hotbar fire, rail open/close) has no such ambiguity and is
+    // fully verified; mouse-click precision on native controls still needs real-hardware testing
+    // before trusting it.
     private const double EnvironmentScaleFactor = 1.25;
 
     public static (double Width, double Height) GetPrimaryScreenDips(Window window)

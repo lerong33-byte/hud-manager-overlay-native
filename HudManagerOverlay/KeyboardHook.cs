@@ -12,6 +12,12 @@ internal sealed class KeyboardHook : IDisposable
     private const int WH_KEYBOARD_LL = 13;
     private const int WM_KEYDOWN = 0x0100;
     private const int WM_KEYUP = 0x0101;
+    // Alt (and Alt+anything) generates the "system key" messages, not the plain ones — confirmed
+    // live: Right Alt went completely undetected until these were added. Without this, ANY
+    // Alt-based binding (including the old app's own Alt+H/Alt+P foot-deck actions, which only
+    // need to be SENT, not detected, so those were fine) would silently fail if ever watched for.
+    private const int WM_SYSKEYDOWN = 0x0104;
+    private const int WM_SYSKEYUP = 0x0105;
 
     private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
@@ -49,8 +55,9 @@ internal sealed class KeyboardHook : IDisposable
         if (nCode >= 0)
         {
             var vkCode = Marshal.ReadInt32(lParam);
-            if (wParam == WM_KEYDOWN) KeyDown?.Invoke(vkCode);
-            else if (wParam == WM_KEYUP) KeyUp?.Invoke(vkCode);
+            var w = wParam.ToInt32();
+            if (w == WM_KEYDOWN || w == WM_SYSKEYDOWN) KeyDown?.Invoke(vkCode);
+            else if (w == WM_KEYUP || w == WM_SYSKEYUP) KeyUp?.Invoke(vkCode);
         }
         return CallNextHookEx(_hookId, nCode, wParam, lParam);
     }

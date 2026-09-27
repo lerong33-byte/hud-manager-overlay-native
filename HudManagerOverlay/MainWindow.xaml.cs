@@ -7,11 +7,12 @@ namespace HudManagerOverlay;
 
 public partial class MainWindow : Window
 {
-    private const int HotkeyId = 1;
     private const ushort VK_RCONTROL = 0xA3;
+    private const ushort VK_RMENU = 0xA5; // Right Alt — tool-rail toggle
     private const ushort VK_1 = 0x31; // 1..9 are contiguous
     private const ushort VK_Y = 0x59; // Star Citizen's default exit-seat key (a HOLD, not a tap)
     private const int ExitSeatHoldMs = 450; // matches main.js _EXIT_HOLD_MS exactly
+    private bool _railKeyDown; // guards against auto-repeat re-toggling while Right Alt is held
 
     private TrayIcon? _tray;
     private PanelHost? _panelHost;
@@ -64,10 +65,6 @@ public partial class MainWindow : Window
         };
 
         SetInteractive(false); // click-through by default — game gets every click until toggled
-
-        NativeInterop.RegisterHotKey(hwnd, HotkeyId, 0, NativeInterop.VK_RMENU);
-        var source = HwndSource.FromHwnd(hwnd);
-        source?.AddHook(WndProc);
 
         _tray = new TrayIcon();
         _tray.ToolRailRequested += () => Dispatcher.Invoke(ToggleToolRail);
@@ -124,6 +121,15 @@ public partial class MainWindow : Window
 
     private void OnGlobalKeyDown(int vk)
     {
+        if (vk == VK_RMENU)
+        {
+            // RegisterHotKey is unreliable for a standalone modifier key like Right Alt (a known
+            // Windows API limitation — confirmed live: simulated presses never fired WM_HOTKEY).
+            // The same low-level hook used for the hotbar/exit-seat detection works correctly
+            // here instead. Guard against auto-repeat re-toggling while the key is held.
+            if (!_railKeyDown) { _railKeyDown = true; Dispatcher.Invoke(ToggleToolRail); }
+            return;
+        }
         if (vk == VK_Y)
         {
             if (!_exitSeatDown && _hotbarCtx == "seat")
@@ -165,6 +171,7 @@ public partial class MainWindow : Window
 
     private void OnGlobalKeyUp(int vk)
     {
+        if (vk == VK_RMENU) { _railKeyDown = false; return; }
         if (vk == VK_Y)
         {
             _exitSeatDown = false;
@@ -176,16 +183,6 @@ public partial class MainWindow : Window
             _hotbarArmed = false;
             Dispatcher.Invoke(() => _hotbar?.SetArmed(false));
         }
-    }
-
-    private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-    {
-        if (msg == NativeInterop.WM_HOTKEY && wParam.ToInt32() == HotkeyId)
-        {
-            ToggleToolRail();
-            handled = true;
-        }
-        return IntPtr.Zero;
     }
 
     private void ToggleToolRail()

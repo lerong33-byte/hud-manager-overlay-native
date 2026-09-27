@@ -1,0 +1,31 @@
+<Window x:Class="HudManagerOverlay.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="H.U.D Manager Overlay"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ShowInTaskbar="False"
+        Topmost="True"
+        WindowStartupLocation="Manual"
+        ResizeMode="NoResize">
+    <Grid>
+        <!-- Phase 1 placeholder: a small status chip proving the shell is alive. Real panels
+             (Ship Loadout Bay, hotbar, rail) get built as their own controls in later phases. -->
+        <Border x:Name="StatusChip"
+                Background="#CC101018"
+                BorderBrush="#5FE0FF"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="10,6"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Margin="20,20,0,0">
+            <TextBlock x:Name="StatusText"
+                       Text="H.U.D Manager (native) — click-through — Right Alt to toggle"
+                       Foreground="#5FE0FF"
+                       FontFamily="Consolas"
+                       FontSize="13"/>
+        </Border>
+    </Grid>
+</Window>

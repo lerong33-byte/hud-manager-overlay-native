@@ -9,14 +9,14 @@ public sealed record HotbarSlot(string Label, ushort Vk, ushort? Modifier = null
 
 // Two decks ported from the old app's default keybinds (main.js) — seat (piloting) and foot
 // (on-foot) actions are entirely different in Star Citizen, so pressing a seat slot on foot
-// does nothing even if the hotbar itself works perfectly (confirmed live 2026-09-27). Real
-// auto-switching between them needs Game.log parsing to know if you're seated — not built yet,
-// so this defaults to the foot deck since that's what's actually testable right now.
+// does nothing even if the hotbar itself works perfectly (confirmed live 2026-09-27). MainWindow
+// auto-switches between them: entering a seat is detected via GameLogWatcher, leaving one via
+// holding the exit-seat key (Y) — see MainWindow's ExitSeat* fields, same approach as main.js.
 public partial class HotbarView : UserControl
 {
     private const ushort VK_MENU = 0x12; // Alt
 
-    private static readonly HotbarSlot?[] SeatDeck =
+    public static readonly HotbarSlot?[] SeatDeck =
     {
         new("Mining", 0x4D),      // M
         new("Scan", 0x56),        // V
@@ -29,7 +29,7 @@ public partial class HotbarView : UserControl
         null,
     };
 
-    private static readonly HotbarSlot?[] FootDeck =
+    public static readonly HotbarSlot?[] FootDeck =
     {
         new("Helmet", 0x48, VK_MENU),   // Alt+H
         new("Visor", 0x50, VK_MENU),    // Alt+P
@@ -42,16 +42,33 @@ public partial class HotbarView : UserControl
         null,                            // Suicide is a hold-action, not a simple tap — skipped
     };
 
-    private static readonly HotbarSlot?[] DefaultDeck = FootDeck;
-
     private readonly List<Border> _slotBorders = new();
+    private HotbarSlot?[] _deck = FootDeck;
+    private bool _armed;
 
     public HotbarView()
     {
         InitializeComponent();
-        for (int i = 0; i < DefaultDeck.Length; i++)
+        BuildSlots();
+    }
+
+    // Swaps the active deck (seat vs foot) and rebuilds the slot UI in place — called by
+    // MainWindow when GameLogWatcher/exit-seat-hold detects a context change.
+    public void SetDeck(HotbarSlot?[] deck)
+    {
+        if (ReferenceEquals(_deck, deck)) return;
+        _deck = deck;
+        BuildSlots();
+        SetArmed(_armed); // rebuilt border lost the armed-state color; reapply it
+    }
+
+    private void BuildSlots()
+    {
+        SlotPanel.Children.Clear();
+        _slotBorders.Clear();
+        for (int i = 0; i < _deck.Length; i++)
         {
-            var slot = DefaultDeck[i];
+            var slot = _deck[i];
             var border = new Border
             {
                 Width = 56, Height = 56, Margin = new Thickness(3),
@@ -80,6 +97,7 @@ public partial class HotbarView : UserControl
 
     public void SetArmed(bool armed)
     {
+        _armed = armed;
         OuterBorder.BorderBrush = (Brush)Application.Current.Resources[armed ? "Amber" : "Cyan"];
     }
 
@@ -96,5 +114,5 @@ public partial class HotbarView : UserControl
         timer.Start();
     }
 
-    public HotbarSlot? GetSlot(int index) => index >= 0 && index < DefaultDeck.Length ? DefaultDeck[index] : null;
+    public HotbarSlot? GetSlot(int index) => index >= 0 && index < _deck.Length ? _deck[index] : null;
 }

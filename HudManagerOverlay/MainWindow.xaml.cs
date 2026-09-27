@@ -10,6 +10,8 @@ public partial class MainWindow : Window
     private const int HotkeyId = 1;
     private const ushort VK_RCONTROL = 0xA3;
     private const ushort VK_1 = 0x31; // 1..9 are contiguous
+    private const ushort VK_Y = 0x59; // Star Citizen's default exit-seat key (a HOLD, not a tap)
+    private const int ExitSeatHoldMs = 450; // matches main.js _EXIT_HOLD_MS exactly
 
     private TrayIcon? _tray;
     private PanelHost? _panelHost;
@@ -20,6 +22,14 @@ public partial class MainWindow : Window
     private ToolRailView? _toolRail;
     private readonly DispatcherTimer _scWatch = new() { Interval = TimeSpan.FromSeconds(2) };
     private AppSettings _settings = AppSettings.Load();
+
+    // Seat vs foot deck context. Entering a seat is detected via Game.log (GameLogWatcher);
+    // leaving one has no log line, so it's detected the same way the old app did it — a HOLD of
+    // the exit-seat key (default Y) past a short threshold while currently in the seat context.
+    private string _hotbarCtx = "foot";
+    private readonly GameLogWatcher _gameLog = new();
+    private bool _exitSeatDown;
+    private DispatcherTimer? _exitSeatHoldTimer;
 
     public MainWindow()
     {
@@ -73,6 +83,16 @@ public partial class MainWindow : Window
         // and means it's never visible (or interceptable) outside an actual play session.
         _scWatch.Tick += (_, _) => Dispatcher.Invoke(UpdateHotbarVisibility);
         _scWatch.Start();
+
+        _gameLog.SeatDetected += () => Dispatcher.Invoke(() => SetHotbarContext("seat"));
+        _gameLog.Start();
+    }
+
+    private void SetHotbarContext(string ctx)
+    {
+        if (ctx == _hotbarCtx) return;
+        _hotbarCtx = ctx;
+        _hotbar?.SetDeck(ctx == "seat" ? HotbarView.SeatDeck : HotbarView.FootDeck);
     }
 
     private void UpdateHotbarVisibility()
@@ -86,6 +106,7 @@ public partial class MainWindow : Window
         if (wantShown)
         {
             _hotbar = new HotbarView();
+            _hotbar.SetDeck(_hotbarCtx == "seat" ? HotbarView.SeatDeck : HotbarView.FootDeck);
             // Query DPI through PanelHost, not MainWindow — MainWindow is created at app startup
             // before per-monitor DPI negotiation settles and gets permanently stuck reporting
             // scale 1.0, while windows created later (like PanelHost) correctly report the real
@@ -103,6 +124,25 @@ public partial class MainWindow : Window
 
     private void OnGlobalKeyDown(int vk)
     {
+        if (vk == VK_Y)
+        {
+            if (!_exitSeatDown && _hotbarCtx == "seat")
+            {
+                _exitSeatDown = true;
+                Dispatcher.Invoke(() =>
+                {
+                    _exitSeatHoldTimer?.Stop();
+                    _exitSeatHoldTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(ExitSeatHoldMs) };
+                    _exitSeatHoldTimer.Tick += (_, _) =>
+                    {
+                        _exitSeatHoldTimer!.Stop();
+                        if (_exitSeatDown) SetHotbarContext("foot");
+                    };
+                    _exitSeatHoldTimer.Start();
+                });
+            }
+            return; // observational only — never swallow; SC needs the real hold to exit the seat
+        }
         if (vk == VK_RCONTROL)
         {
             _hotbarArmed = true;
@@ -125,6 +165,12 @@ public partial class MainWindow : Window
 
     private void OnGlobalKeyUp(int vk)
     {
+        if (vk == VK_Y)
+        {
+            _exitSeatDown = false;
+            Dispatcher.Invoke(() => _exitSeatHoldTimer?.Stop());
+            return;
+        }
         if (vk == VK_RCONTROL)
         {
             _hotbarArmed = false;

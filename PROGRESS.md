@@ -59,6 +59,13 @@ Updated as work happens — check here any time for current state without needin
 | List UI (search + RS sort) | 🔧 | Built, not live-clicked |
 | Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 
+## Acquisition (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Data (101 components, type + buy locations) | 🔧 | |
+| List UI (search) | 🔧 | Built, not live-clicked |
+| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+
 ## Not started
 - Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
 - Head tracking, voice, license/premium gating

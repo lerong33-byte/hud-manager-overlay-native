@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Velopack;
 using Velopack.Sources;
@@ -22,35 +23,55 @@ internal static class AppUpdater
     private static UpdateManager? _manager;
     private static UpdateInfo? _pendingUpdate;
 
+    // TEMPORARY diagnostic logging (2026-09-28) — the background check produced no visible
+    // outcome (no exception, but also no downloaded package after several minutes) during manual
+    // end-to-end testing, and this is a WinExe with no console to see Console.WriteLine. Remove
+    // once auto-update is confirmed reliable; this is not meant to ship long-term.
+    private static void Log(string msg)
+    {
+        try
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "..", "update-debug.log");
+            File.AppendAllText(path, $"{DateTime.Now:HH:mm:ss} {msg}\n");
+        }
+        catch { /* logging must never be why this breaks */ }
+    }
+
     public static void CheckInBackground()
     {
         _ = Task.Run(async () =>
         {
             try
             {
+                Log("CheckInBackground started, waiting 15s");
                 // Let the app finish opening or the AV false-positive theatrics have no chance
                 // to compete with startup; this is a low-priority background task either way.
                 await Task.Delay(TimeSpan.FromSeconds(15));
 
                 var source = new GithubSource(RepoUrl, accessToken: null, prerelease: false);
                 _manager = new UpdateManager(source);
+                Log($"IsInstalled={_manager.IsInstalled} CurrentVersion={_manager.CurrentVersion}");
 
                 // Running from a plain `dotnet build`/F5 dev session (not installed via the
                 // Velopack Setup.exe) has no update metadata on disk at all — CheckForUpdatesAsync
                 // would just throw. Skip entirely rather than let that surface as a startup error
                 // for every dev session.
-                if (!_manager.IsInstalled) return;
+                if (!_manager.IsInstalled) { Log("Not installed, skipping"); return; }
 
+                Log("Calling CheckForUpdatesAsync...");
                 var info = await _manager.CheckForUpdatesAsync();
-                if (info == null) return;
+                if (info == null) { Log("No update found"); return; }
+                Log($"Update found: {info.TargetFullRelease.Version}, downloading...");
 
                 await _manager.DownloadUpdatesAsync(info);
                 _pendingUpdate = info;
+                Log("Download complete, pending apply on quit");
             }
-            catch
+            catch (Exception ex)
             {
                 // Offline, rate-limited, GitHub having a bad day — none of that should ever be
                 // user-visible for a background check. It'll just try again next launch.
+                Log($"EXCEPTION: {ex}");
             }
         });
     }

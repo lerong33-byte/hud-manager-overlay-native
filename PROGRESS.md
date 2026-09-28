@@ -41,7 +41,7 @@ Updated as work happens — check here any time for current state without needin
 | Module | Status | Notes |
 |---|---|---|
 | Data model + loader | 🔧 | Loads 1606 blueprints, app stays up (smoke-tested) |
-| List + search + detail (craft time, ingredients, sources) | 🔧 | Built, not live-clicked |
+| List + search + detail (craft time, ingredients, sources) | 🔧 | Real ingredient list from crafting-enriched.json wired in; not live-clicked |
 | Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 | Got-it tracking / mission cross-reference (old panel had this) | ⬜ | Deliberately deferred — v1 is browse-only |
 

@@ -72,6 +72,7 @@ public partial class MainWindow : Window
         _tray.LoadoutBayRequested += () => Dispatcher.Invoke(OpenLoadoutBay);
         _tray.MissionsRequested += () => Dispatcher.Invoke(OpenMissions);
         _tray.BlueprintsRequested += () => Dispatcher.Invoke(OpenBlueprints);
+        _tray.WeaponsDbRequested += () => Dispatcher.Invoke(OpenWeaponsDb);
 
         _keyHook = new KeyboardHook();
         _keyHook.KeyDown += OnGlobalKeyDown;
@@ -203,6 +204,7 @@ public partial class MainWindow : Window
         _toolRail.AddTool("SHIP LOADOUT BAY", OpenLoadoutBay);
         _toolRail.AddTool("MISSIONS", OpenMissions);
         _toolRail.AddTool("BLUEPRINTS", OpenBlueprints);
+        _toolRail.AddTool("WEAPONS DB", OpenWeaponsDb);
         _toolRail.CloseRequested += () =>
         {
             if (_toolRail == null) return;
@@ -254,6 +256,22 @@ public partial class MainWindow : Window
             : (200, 150, 620, 480);
         var chrome = _panelHost.AddPanel("BLUEPRINTS", new BlueprintsView(), x, y, w, h);
         chrome.CloseRequested += () => _settings.Panels["blueprints"] = new PanelState
+        {
+            X = System.Windows.Controls.Canvas.GetLeft(chrome),
+            Y = System.Windows.Controls.Canvas.GetTop(chrome),
+            W = chrome.ActualWidth, H = chrome.ActualHeight,
+        };
+    }
+
+    private void OpenWeaponsDb()
+    {
+        _panelHost ??= new PanelHost();
+        var saved = _settings.Panels.GetValueOrDefault("weapons-db");
+        var (x, y, w, h) = saved != null
+            ? (saved.X, saved.Y, saved.W, saved.H)
+            : (200, 150, 520, 480);
+        var chrome = _panelHost.AddPanel("WEAPONS DB", new WeaponsDbView(), x, y, w, h);
+        chrome.CloseRequested += () => _settings.Panels["weapons-db"] = new PanelState
         {
             X = System.Windows.Controls.Canvas.GetLeft(chrome),
             Y = System.Windows.Controls.Canvas.GetTop(chrome),

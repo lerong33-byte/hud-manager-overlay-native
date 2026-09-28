@@ -16,6 +16,7 @@ internal sealed class TrayIcon : IDisposable
     public event Action? LoadoutBayRequested;
     public event Action? MissionsRequested;
     public event Action? BlueprintsRequested;
+    public event Action? WeaponsDbRequested;
 
     public TrayIcon()
     {
@@ -28,12 +29,15 @@ internal sealed class TrayIcon : IDisposable
         missionsItem.Click += (_, _) => MissionsRequested?.Invoke();
         var blueprintsItem = new ToolStripMenuItem("Blueprints");
         blueprintsItem.Click += (_, _) => BlueprintsRequested?.Invoke();
+        var weaponsDbItem = new ToolStripMenuItem("Weapons DB");
+        weaponsDbItem.Click += (_, _) => WeaponsDbRequested?.Invoke();
         var quitItem = new ToolStripMenuItem("Quit");
         quitItem.Click += (_, _) => QuitRequested?.Invoke();
         menu.Items.Add(railItem);
         menu.Items.Add(loadoutItem);
         menu.Items.Add(missionsItem);
         menu.Items.Add(blueprintsItem);
+        menu.Items.Add(weaponsDbItem);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(quitItem);
 

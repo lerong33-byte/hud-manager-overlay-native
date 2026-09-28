@@ -45,6 +45,13 @@ Updated as work happens — check here any time for current state without needin
 | Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 | Got-it tracking / mission cross-reference (old panel had this) | ⬜ | Deliberately deferred — v1 is browse-only |
 
+## Weapons DB (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Data extraction (damage/fireRate/DPS computed from erkul-weapons.json) | 🔧 | 155 entries |
+| List UI (search + DPS sort) | 🔧 | Built, not live-clicked |
+| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+
 ## Not started
 - Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
 - Head tracking, voice, license/premium gating

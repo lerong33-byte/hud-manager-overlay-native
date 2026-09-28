@@ -70,6 +70,7 @@ public partial class MainWindow : Window
         _tray.ToolRailRequested += () => Dispatcher.Invoke(ToggleToolRail);
         _tray.QuitRequested += () => Dispatcher.Invoke(Close);
         _tray.LoadoutBayRequested += () => Dispatcher.Invoke(OpenLoadoutBay);
+        _tray.MissionsRequested += () => Dispatcher.Invoke(OpenMissions);
 
         _keyHook = new KeyboardHook();
         _keyHook.KeyDown += OnGlobalKeyDown;
@@ -199,6 +200,7 @@ public partial class MainWindow : Window
 
         _toolRail = new ToolRailView();
         _toolRail.AddTool("SHIP LOADOUT BAY", OpenLoadoutBay);
+        _toolRail.AddTool("MISSIONS", OpenMissions);
         _toolRail.CloseRequested += () =>
         {
             if (_toolRail == null) return;
@@ -218,6 +220,22 @@ public partial class MainWindow : Window
             : (200, 150, 640, 480);
         var chrome = _panelHost.AddPanel("SHIP LOADOUT BAY", new LoadoutBayView(), x, y, w, h);
         chrome.CloseRequested += () => _settings.Panels["loadout-bay"] = new PanelState
+        {
+            X = System.Windows.Controls.Canvas.GetLeft(chrome),
+            Y = System.Windows.Controls.Canvas.GetTop(chrome),
+            W = chrome.ActualWidth, H = chrome.ActualHeight,
+        };
+    }
+
+    private void OpenMissions()
+    {
+        _panelHost ??= new PanelHost();
+        var saved = _settings.Panels.GetValueOrDefault("missions");
+        var (x, y, w, h) = saved != null
+            ? (saved.X, saved.Y, saved.W, saved.H)
+            : (200, 150, 680, 480);
+        var chrome = _panelHost.AddPanel("MISSIONS", new MissionsView(), x, y, w, h);
+        chrome.CloseRequested += () => _settings.Panels["missions"] = new PanelState
         {
             X = System.Windows.Controls.Canvas.GetLeft(chrome),
             Y = System.Windows.Controls.Canvas.GetTop(chrome),

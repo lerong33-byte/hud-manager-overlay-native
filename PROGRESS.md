@@ -1,0 +1,45 @@
+# Native Overlay Rebuild — Progress Tracker
+
+Status legend: ✅ Verified live · 🔧 Built, not live-verified · 🚧 In progress · ⬜ Not started
+
+Updated as work happens — check here any time for current state without needing to ask.
+
+## Core shell
+| Module | Status | Notes |
+|---|---|---|
+| Transparent click-through window | ✅ | |
+| Single PanelHost (GPU-contention fix) | ✅ | |
+| Global keyboard hook (WH_KEYBOARD_LL) | ✅ | |
+| Hotbar (Right Ctrl + digits → real SC keystrokes) | ✅ | User-confirmed in-game |
+| Tool rail (Right Alt) | ✅ | 3 real bugs found+fixed |
+| Seat/foot detection (Game.log) | 🔧 | Built, not live-tested |
+| Settings persistence | ✅ | |
+| Tray icon | ✅ | |
+
+## Ship Loadout Bay (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Ship list + search | ✅ | |
+| Stats display (speed/hull/shield/weaponry) | ✅ | |
+| Weapon mounts — swap + save | ✅ | |
+| Turret/manned-turret weapon rows | 🔧 | Code-review confidence only, no live click yet |
+| Missile racks — swap + save | ✅ | |
+| Components: power plant/shield/cooler/qdrive — swap + save | ✅ | |
+| Components: flight controller — swap + save | 🔧 | Just built, not live-clicked |
+| Radar / life support — read-only display | 🔧 | Just built, not live-clicked |
+
+## Missions (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Data model + loader | 🔧 | Just built |
+| Category + mission list UI | 🚧 | In progress |
+| Detail pane | 🚧 | In progress |
+| Wired into tool rail | ⬜ | |
+| AI mission-explain / video walkthroughs / briefings | ⬜ | Deliberately deferred — network/API-dependent, v1 is pure static-data browse |
+
+## Not started
+- Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
+- Head tracking, voice, license/premium gating
+- Installer, code signing, CI, auto-update
+- Visual/graphical polish (intentionally deferred per user)
+- Real-hardware DPI verification (currently hardcoded EnvironmentScaleFactor=1.25 guess)

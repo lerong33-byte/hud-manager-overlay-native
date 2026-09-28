@@ -74,6 +74,7 @@ public partial class MainWindow : Window
         _tray.BlueprintsRequested += () => Dispatcher.Invoke(OpenBlueprints);
         _tray.WeaponsDbRequested += () => Dispatcher.Invoke(OpenWeaponsDb);
         _tray.MaterialsRequested += () => Dispatcher.Invoke(OpenMaterials);
+        _tray.AcquisitionRequested += () => Dispatcher.Invoke(OpenAcquisition);
 
         _keyHook = new KeyboardHook();
         _keyHook.KeyDown += OnGlobalKeyDown;
@@ -207,6 +208,7 @@ public partial class MainWindow : Window
         _toolRail.AddTool("BLUEPRINTS", OpenBlueprints);
         _toolRail.AddTool("WEAPONS DB", OpenWeaponsDb);
         _toolRail.AddTool("MATERIALS", OpenMaterials);
+        _toolRail.AddTool("ACQUISITION", OpenAcquisition);
         _toolRail.CloseRequested += () =>
         {
             if (_toolRail == null) return;
@@ -290,6 +292,22 @@ public partial class MainWindow : Window
             : (200, 150, 420, 480);
         var chrome = _panelHost.AddPanel("MATERIALS", new MaterialsView(), x, y, w, h);
         chrome.CloseRequested += () => _settings.Panels["materials"] = new PanelState
+        {
+            X = System.Windows.Controls.Canvas.GetLeft(chrome),
+            Y = System.Windows.Controls.Canvas.GetTop(chrome),
+            W = chrome.ActualWidth, H = chrome.ActualHeight,
+        };
+    }
+
+    private void OpenAcquisition()
+    {
+        _panelHost ??= new PanelHost();
+        var saved = _settings.Panels.GetValueOrDefault("acquisition");
+        var (x, y, w, h) = saved != null
+            ? (saved.X, saved.Y, saved.W, saved.H)
+            : (200, 150, 480, 480);
+        var chrome = _panelHost.AddPanel("ACQUISITION", new AcquisitionView(), x, y, w, h);
+        chrome.CloseRequested += () => _settings.Panels["acquisition"] = new PanelState
         {
             X = System.Windows.Controls.Canvas.GetLeft(chrome),
             Y = System.Windows.Controls.Canvas.GetTop(chrome),

@@ -18,6 +18,7 @@ internal sealed class TrayIcon : IDisposable
     public event Action? BlueprintsRequested;
     public event Action? WeaponsDbRequested;
     public event Action? MaterialsRequested;
+    public event Action? AcquisitionRequested;
 
     public TrayIcon()
     {
@@ -34,6 +35,8 @@ internal sealed class TrayIcon : IDisposable
         weaponsDbItem.Click += (_, _) => WeaponsDbRequested?.Invoke();
         var materialsItem = new ToolStripMenuItem("Materials");
         materialsItem.Click += (_, _) => MaterialsRequested?.Invoke();
+        var acquisitionItem = new ToolStripMenuItem("Acquisition");
+        acquisitionItem.Click += (_, _) => AcquisitionRequested?.Invoke();
         var quitItem = new ToolStripMenuItem("Quit");
         quitItem.Click += (_, _) => QuitRequested?.Invoke();
         menu.Items.Add(railItem);
@@ -42,6 +45,7 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add(blueprintsItem);
         menu.Items.Add(weaponsDbItem);
         menu.Items.Add(materialsItem);
+        menu.Items.Add(acquisitionItem);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(quitItem);
 

@@ -1,0 +1,246 @@
+[
+  {
+    "name": "Arrow I",
+    "size": 1
+  },
+  {
+    "name": "Marksman I",
+    "size": 1
+  },
+  {
+    "name": "Marksman I-G",
+    "size": 1
+  },
+  {
+    "name": "Pioneer I",
+    "size": 1
+  },
+  {
+    "name": "Pioneer I-G",
+    "size": 1
+  },
+  {
+    "name": "Spark I",
+    "size": 1
+  },
+  {
+    "name": "Spark I-G",
+    "size": 1
+  },
+  {
+    "name": "TaskForce I",
+    "size": 1
+  },
+  {
+    "name": "TaskForce I-G",
+    "size": 1
+  },
+  {
+    "name": "Bullet II",
+    "size": 2
+  },
+  {
+    "name": "Dmntr II",
+    "size": 2
+  },
+  {
+    "name": "Dmntr II-G",
+    "size": 2
+  },
+  {
+    "name": "Ignite II",
+    "size": 2
+  },
+  {
+    "name": "Ignite II-G",
+    "size": 2
+  },
+  {
+    "name": "Rattler II",
+    "size": 2
+  },
+  {
+    "name": "StrkFrc II",
+    "size": 2
+  },
+  {
+    "name": "StrkFrc II-G",
+    "size": 2
+  },
+  {
+    "name": "Tempest II",
+    "size": 2
+  },
+  {
+    "name": "Tempest II-G",
+    "size": 2
+  },
+  {
+    "name": "Chaos III",
+    "size": 3
+  },
+  {
+    "name": "Argos IX-G",
+    "size": 3
+  },
+  {
+    "name": "Arrstr III",
+    "size": 3
+  },
+  {
+    "name": "Thdrblt III",
+    "size": 3
+  },
+  {
+    "name": "Thdrblt III-G",
+    "size": 3
+  },
+  {
+    "name": "Viper III",
+    "size": 3
+  },
+  {
+    "name": "Dragon IV",
+    "size": 4
+  },
+  {
+    "name": "Viper III-G",
+    "size": 3
+  },
+  {
+    "name": "Asslnt IV",
+    "size": 4
+  },
+  {
+    "name": "Asslnt IV-G",
+    "size": 4
+  },
+  {
+    "name": "Pathfndr IV",
+    "size": 4
+  },
+  {
+    "name": "Pathfndr IV-G",
+    "size": 4
+  },
+  {
+    "name": "Raptor IV",
+    "size": 4
+  },
+  {
+    "name": "Reaper V",
+    "size": 5
+  },
+  {
+    "name": "Reaper V-G",
+    "size": 5
+  },
+  {
+    "name": "Scimitar V",
+    "size": 5
+  },
+  {
+    "name": "Scimitar V-G",
+    "size": 5
+  },
+  {
+    "name": "Stalker V",
+    "size": 5
+  },
+  {
+    "name": "Stalker V-G",
+    "size": 5
+  },
+  {
+    "name": "Valkyrie V",
+    "size": 5
+  },
+  {
+    "name": "Valkyrie V-G",
+    "size": 5
+  },
+  {
+    "name": "Hellion VII",
+    "size": 7
+  },
+  {
+    "name": "Hellion VII-G",
+    "size": 7
+  },
+  {
+    "name": "Argos IX",
+    "size": 9
+  },
+  {
+    "name": "Argos IX-G",
+    "size": 9
+  },
+  {
+    "name": "Seeker IX",
+    "size": 9
+  },
+  {
+    "name": "Seeker IX-G",
+    "size": 9
+  },
+  {
+    "name": "Typhoon IX",
+    "size": 9
+  },
+  {
+    "name": "Typhoon IX-G",
+    "size": 9
+  },
+  {
+    "name": "EX-T10-CS Torpedo",
+    "size": 10
+  },
+  {
+    "name": "EX-T10-EM Torpedo",
+    "size": 10
+  },
+  {
+    "name": "EX-T10-IR Torpedo",
+    "size": 10
+  },
+  {
+    "name": "Vanquish. X-CS Torp.",
+    "size": 10
+  },
+  {
+    "name": "Vanquish. X-EM Torp.",
+    "size": 10
+  },
+  {
+    "name": "Vanquish. X-IR Torp.",
+    "size": 10
+  },
+  {
+    "name": "VT-T10 Torpedo",
+    "size": 10
+  },
+  {
+    "name": "Calmty. XII-CS Torp.",
+    "size": 12
+  },
+  {
+    "name": "Calmty. XII-EM Torp.",
+    "size": 12
+  },
+  {
+    "name": "Calmty. XII-IR Torp.",
+    "size": 12
+  },
+  {
+    "name": "EX-T12-CS Torpedo",
+    "size": 12
+  },
+  {
+    "name": "EX-T12-EM Torpedo",
+    "size": 12
+  },
+  {
+    "name": "EX-T12-IR Torpedo",
+    "size": 12
+  }
+]

@@ -20,7 +20,12 @@ public sealed class WeaponSlotDisplay
     public string SelectedName { get; set; } = "";
 }
 
-public sealed record MissileSlotDisplay(string Label, string Summary);
+public sealed class MissileSlotDisplay
+{
+    public string Label { get; init; } = "";
+    public List<string> Options { get; init; } = new();
+    public string SelectedName { get; set; } = "";
+}
 
 public partial class ShipDetailView : UserControl
 {
@@ -95,8 +100,15 @@ public partial class ShipDetailView : UserControl
         WeaponSlotList.ItemsSource = guns;
         LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
-        var racks = ship.Missiles.Select(m => new MissileSlotDisplay(
-            m.Label, m.Count > 0 ? $"{m.Count}x {m.DefaultName ?? "Empty"}" : "Empty")).ToList();
+        var racks = ship.Missiles.Where(m => m.Count > 0).Select(m =>
+        {
+            var options = MissileCatalog.NamesForSize(m.HoldsSize);
+            var stock = m.DefaultName ?? "Empty";
+            if (!options.Contains(stock)) options.Insert(0, stock);
+            var current = saved.MissileBySlotLabel.TryGetValue(m.Label, out var chosen) && options.Contains(chosen)
+                ? chosen : stock;
+            return new MissileSlotDisplay { Label = $"{m.Label} · {m.Count}x", Options = options, SelectedName = current };
+        }).ToList();
         MissileSlotList.ItemsSource = racks;
         MissileSlotHeader.Visibility = racks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
@@ -113,5 +125,12 @@ public partial class ShipDetailView : UserControl
         if (sender is not ComboBox { DataContext: WeaponSlotDisplay slot }) return;
         if (string.IsNullOrEmpty(_currentShipName) || string.IsNullOrEmpty(slot.SelectedName)) return;
         LoadoutStore.SetWeapon(_currentShipName, slot.Label, slot.SelectedName);
+    }
+
+    private void MissileCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ComboBox { DataContext: MissileSlotDisplay slot }) return;
+        if (string.IsNullOrEmpty(_currentShipName) || string.IsNullOrEmpty(slot.SelectedName)) return;
+        LoadoutStore.SetMissile(_currentShipName, slot.Label, slot.SelectedName);
     }
 }

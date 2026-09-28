@@ -47,7 +47,8 @@ public sealed class WeaponSlot
 public sealed class MissileSlot
 {
     [JsonPropertyName("lbl")] public string Label { get; set; } = "";
-    [JsonPropertyName("sz")] public int Size { get; set; }
+    [JsonPropertyName("sz")] public int Size { get; set; } // the RACK's own size, not the missile it holds
+    [JsonPropertyName("holds_sz")] public int HoldsSize { get; set; } // the missile size that actually fits — use this for compatibility, not Size
     [JsonPropertyName("count")] public int Count { get; set; }
     [JsonPropertyName("defaultName")] public string? DefaultName { get; set; }
     [JsonPropertyName("podName")] public string? PodName { get; set; }

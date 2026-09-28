@@ -75,8 +75,10 @@ Updated as work happens — check here any time for current state without needin
 | Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 (opens, doesn't crash) |
 
 ## Not started
-- Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
-- Head tracking, voice, license/premium gating
-- Installer, code signing, CI, auto-update
+- **Media/recording suite** — checked the Electron source 2026-09-28: this is NOT a simple video player, it's a full screen-recording + Twitch/YouTube streaming + mic/voice-over + video editing + YouTube/TikTok/X upload-with-OAuth suite (~4500 lines in the Electron version). Treat as its own multi-session project, not a quick port.
+- **Live Kit** — checked 2026-09-28: the website's `overlay-live-kit.html` is a UI-only approved mockup with NO real backend; it expects gear/server data via `postMessage` from somewhere that was never built, even in Electron. Porting this means building the Game.log parser from scratch (armor/weapon loadout detection, shard/region tracking) with no reference implementation to verify against — and no way to validate parsing regexes without Star Citizen actually running. Don't build blind; needs either live-game testing access or the real spec.
+- admin/live Game.log panel — same live-data-needed caveat as Live Kit.
+- Head tracking, voice, license/premium gating — all need live SC/hardware to build against meaningfully.
+- Installer, code signing, CI, auto-update — 🔧 **started 2026-09-28**: self-contained single-file publish config added and verified (`dotnet publish -c Release -r win-x64 --self-contained true` → one working standalone .exe, no .NET install required). Still open: actual installer (MSI/Squirrel/etc.), code signing cert, GitHub Actions CI wiring, auto-update server + client check-in logic.
 - Visual/graphical polish (intentionally deferred per user)
-- Real-hardware DPI verification (currently hardcoded EnvironmentScaleFactor=1.25 guess)
+- Real-hardware DPI verification — investigated 2026-09-28: `ScreenHelper`'s hardcoded `EnvironmentScaleFactor=1.25` was suspected to be a dev-environment artifact, but this machine's registry (`HKCU\Control Panel\Desktop\WindowMetrics\AppliedDPI` = 120, i.e. 125%) shows it's genuinely a 125%-scaled real display — the hack may be masking a real PerMonitorV2 manifest issue rather than compensating for a virtual/remote session as originally suspected. Not resolved; app.manifest already declares `PerMonitorV2` correctly on its face, so the actual runtime DPI behavior of the compiled exe itself (not tools like PowerShell probing it externally) still needs checking before deciding whether to remove the hardcoded factor.

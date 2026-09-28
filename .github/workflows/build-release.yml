@@ -69,10 +69,21 @@ jobs:
             -c Release -r win-x64 --self-contained true `
             -o publish
 
-      - name: Package installer (vpk)
+      - name: Package installer (vpk) - signed via Azure Trusted Signing when secrets exist
         shell: pwsh
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+          AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
         run: |
-          vpk pack `
+          $signArgs = @()
+          if ($env:AZURE_TENANT_ID -and $env:AZURE_CLIENT_ID -and $env:AZURE_CLIENT_SECRET) {
+            @{ Endpoint = "https://wus2.codesigning.azure.net/"; CodeSigningAccountName = "hudmanager-signing"; CertificateProfileName = "hudmanager" } |
+              ConvertTo-Json | Set-Content signing-metadata.json
+            $signArgs = @("--azureTrustedSignFile", "signing-metadata.json")
+            Write-Output "Signing ENABLED (Azure Trusted Signing)"
+          } else { Write-Output "Signing skipped: Azure secrets not set on this repo" }
+          vpk pack @signArgs `
             --packId HudManagerOverlay `
             --packVersion "${{ steps.ver.outputs.pkg }}" `
             --packDir publish `
@@ -104,3 +115,9 @@ jobs:
             Releases/RELEASES \
             Releases/releases.win.json
           echo "Uploaded installer + update feed to ${{ github.repository }} @ $TAG (draft=${{ github.event.inputs.draft }})"
+
+      - name: Report signature status
+        shell: pwsh
+        run: |
+          $sig = Get-AuthenticodeSignature Releases/HudManagerOverlay-win-Setup.exe
+          Write-Output "Setup.exe signature: $($sig.Status) / $($sig.SignerCertificate.Subject)"

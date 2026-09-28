@@ -32,15 +32,24 @@ public sealed class ShipWeaponry
     [JsonPropertyName("missile_count")] public double? MissileCount { get; set; }
 }
 
+public sealed class WeaponSlotChild
+{
+    [JsonPropertyName("sz")] public int Size { get; set; }
+    [JsonPropertyName("gimbal")] public bool Gimbal { get; set; }
+    [JsonPropertyName("defaultName")] public string? DefaultName { get; set; }
+}
+
 public sealed class WeaponSlot
 {
-    [JsonPropertyName("kind")] public string Kind { get; set; } = "";
+    [JsonPropertyName("kind")] public string Kind { get; set; } = ""; // "gun" (single mount) | "turret"/"manned-turret" (has Children, one gun each)
     [JsonPropertyName("lbl")] public string Label { get; set; } = "";
     [JsonPropertyName("sz")] public int Size { get; set; }
     [JsonPropertyName("gimbal")] public bool Gimbal { get; set; }
     [JsonPropertyName("fixed")] public bool Fixed { get; set; }
-    [JsonPropertyName("count")] public int Count { get; set; } = 1;
+    [JsonPropertyName("count")] public int Count { get; set; } = 1; // how many identical instances of this whole slot exist (e.g. 2 turrets)
     [JsonPropertyName("defaultName")] public string? DefaultName { get; set; }
+    [JsonPropertyName("children")] public List<WeaponSlotChild>? Children { get; set; }
+    [JsonPropertyName("manned")] public bool Manned { get; set; }
     [JsonPropertyName("locked")] public bool Locked { get; set; }
 }
 

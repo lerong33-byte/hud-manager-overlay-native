@@ -89,22 +89,31 @@ public partial class ShipDetailView : UserControl
         }
 
         var saved = LoadoutStore.Get(ship.Name);
-        var guns = ship.Slots.Where(s => s.Kind == "gun").Select(s =>
+        var guns = new List<WeaponSlotDisplay>();
+        foreach (var s in ship.Slots)
         {
-            var options = WeaponCatalog.NamesForSize(s.Size);
-            var stock = s.DefaultName ?? "Empty";
-            if (!options.Contains(stock)) options.Insert(0, stock); // keep the ship's stock weapon selectable even if it's not in the trimmed catalog
-            // A previously saved choice for this exact slot wins over stock, but only if it's
-            // still a valid option for this mount size (catalog/ship data may have changed).
-            var current = saved.WeaponBySlotLabel.TryGetValue(s.Label, out var chosen) && options.Contains(chosen)
-                ? chosen : stock;
-            return new WeaponSlotDisplay
+            if (s.Kind == "gun")
             {
-                Label = s.Label, Size = s.Size,
-                MountKind = s.Fixed ? " Fixed" : s.Gimbal ? " Gimbal" : "",
-                Options = options, SelectedName = current,
-            };
-        }).ToList();
+                guns.Add(BuildGunRow(s.Label, s.Size, s.Gimbal, s.Fixed, s.DefaultName, saved));
+            }
+            else if ((s.Kind == "turret" || s.Kind == "manned-turret") && s.Children is { Count: > 0 } children)
+            {
+                // A turret can exist in more than one identical instance (Count) and each instance
+                // has several independently-mounted guns (Children) — flatten both into individual
+                // rows so every physical gun gets its own swap dropdown, same as a plain mount.
+                var instances = Math.Max(1, s.Count);
+                for (int inst = 0; inst < instances; inst++)
+                {
+                    var instanceLabel = instances > 1 ? $"{s.Label} #{inst + 1}" : s.Label;
+                    for (int i = 0; i < children.Count; i++)
+                    {
+                        var child = children[i];
+                        var childLabel = children.Count > 1 ? $"{instanceLabel} - Gun {i + 1}" : instanceLabel;
+                        guns.Add(BuildGunRow(childLabel, child.Size, child.Gimbal, !child.Gimbal, child.DefaultName, saved));
+                    }
+                }
+            }
+        }
         WeaponSlotList.ItemsSource = guns;
         LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -130,6 +139,22 @@ public partial class ShipDetailView : UserControl
         }
         ComponentList.ItemsSource = components;
         ComponentHeader.Visibility = components.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private static WeaponSlotDisplay BuildGunRow(string label, int size, bool gimbal, bool isFixed, string? defaultName, ShipLoadoutChoice saved)
+    {
+        var options = WeaponCatalog.NamesForSize(size);
+        var stock = defaultName ?? "Empty";
+        if (!options.Contains(stock)) options.Insert(0, stock); // keep the ship's stock weapon selectable even if it's not in the trimmed catalog
+        // A previously saved choice for this exact slot wins over stock, but only if it's still a
+        // valid option for this mount size (catalog/ship data may have changed).
+        var current = saved.WeaponBySlotLabel.TryGetValue(label, out var chosen) && options.Contains(chosen) ? chosen : stock;
+        return new WeaponSlotDisplay
+        {
+            Label = label, Size = size,
+            MountKind = isFixed ? " Fixed" : gimbal ? " Gimbal" : "",
+            Options = options, SelectedName = current,
+        };
     }
 
     // One method for all 4 component kinds (power plant, shield, cooler, quantum drive) since the

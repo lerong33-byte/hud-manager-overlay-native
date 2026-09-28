@@ -41,6 +41,7 @@ public partial class WeaponsDbView : UserControl
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
+        WeaponList.ItemsSource = null;
         WeaponList.ItemsSource = q.Length == 0
             ? _all
             : _all.Where(w => w.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();

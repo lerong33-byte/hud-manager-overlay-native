@@ -37,6 +37,7 @@ public partial class MaterialsView : UserControl
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
+        MaterialList.ItemsSource = null;
         MaterialList.ItemsSource = q.Length == 0
             ? _all
             : _all.Where(m => m.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();

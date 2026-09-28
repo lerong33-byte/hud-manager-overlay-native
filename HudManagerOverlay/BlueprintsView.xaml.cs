@@ -47,6 +47,13 @@ public partial class BlueprintsView : UserControl
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
+        // Reassigning to a plain List<T> should always force a full ItemsControl refresh, but in
+        // this app's layered click-through overlay window that silently didn't happen for a
+        // reassignment after the control was already showing something — clearing to null first
+        // forces WPF to fully detach and rebuild instead of (failing to) diff the old set.
+        // Same root cause as the 2026-09-28 Missions category bug; applied everywhere ItemsSource
+        // gets reassigned post-initial-load.
+        BlueprintList.ItemsSource = null;
         BlueprintList.ItemsSource = q.Length == 0
             ? _all
             : _all.Where(b => b.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
@@ -82,6 +89,7 @@ public partial class BlueprintsView : UserControl
                 QtyText = i.Qty is double q ? $"{q:0.##}{(string.IsNullOrEmpty(i.Unit) ? "" : " " + i.Unit)}" : "",
             }).ToList()
             : new List<IngredientDisplay>();
+        IngredientList.ItemsSource = null;
         IngredientList.ItemsSource = ingredients;
         IngredientHeader.Text = ingredients.Count > 0
             ? "INGREDIENTS"
@@ -92,6 +100,7 @@ public partial class BlueprintsView : UserControl
             Title = s.Title ?? s.DebugName ?? "Unknown source",
             ScopeAndChance = FormatScopeChance(s.RewardScope, s.Chance),
         }).ToList();
+        SourceList.ItemsSource = null;
         SourceList.ItemsSource = sources;
         SourcesHeader.Text = sources.Count > 0 ? "UNLOCK SOURCES" : "UNLOCK SOURCES — none known";
     }

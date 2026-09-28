@@ -37,6 +37,7 @@ public partial class AcquisitionView : UserControl
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
+        ItemList.ItemsSource = null;
         ItemList.ItemsSource = q.Length == 0
             ? _all
             : _all.Where(a => a.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();

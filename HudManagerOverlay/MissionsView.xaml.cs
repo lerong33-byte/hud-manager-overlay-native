@@ -83,17 +83,29 @@ public partial class MissionsView : UserControl
 
         _currentCategoryMissions = cat.Missions.Select(ToDisplay).ToList();
         SearchBox.Text = "";
-        MissionList.ItemsSource = _currentCategoryMissions;
+        SetMissionListItems(_currentCategoryMissions);
         ShowNoSelection();
+    }
+
+    // Reassigning ItemsSource to a new List<T> reference should always force a full refresh — but
+    // in this app's layered click-through overlay window, it silently didn't: switching category
+    // updated the selection highlight fine but left the mission list showing the old category's
+    // rows indefinitely (confirmed not a delayed render — still stale after several seconds).
+    // Clearing to null first forces WPF to fully detach and rebuild containers instead of
+    // (failing to) diff against the old set. Bug reported 2026-09-28.
+    private void SetMissionListItems(List<MissionDisplay> items)
+    {
+        MissionList.ItemsSource = null;
+        MissionList.ItemsSource = items;
     }
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
-        MissionList.ItemsSource = q.Length == 0
+        SetMissionListItems(q.Length == 0
             ? _currentCategoryMissions
             : _currentCategoryMissions.Where(m =>
-                m.Title.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
+                m.Title.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList());
     }
 
     private void MissionList_SelectionChanged(object sender, SelectionChangedEventArgs e)

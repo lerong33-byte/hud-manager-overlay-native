@@ -22,6 +22,15 @@ internal static class NativeInterop
     private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
 
     [DllImport("user32.dll")]
+    private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int x, int y, int cx, int cy, uint uFlags);
+
+    private const uint SWP_NOMOVE = 0x0002;
+    private const uint SWP_NOSIZE = 0x0001;
+    private const uint SWP_NOZORDER = 0x0004;
+    private const uint SWP_NOACTIVATE = 0x0010;
+    private const uint SWP_FRAMECHANGED = 0x0020;
+
+    [DllImport("user32.dll")]
     public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
 
     [DllImport("user32.dll")]
@@ -44,5 +53,14 @@ internal static class NativeInterop
         int style = GetWindowLong(hwnd, GWL_EXSTYLE);
         style = clickThrough ? (style | WS_EX_TRANSPARENT) : (style & ~WS_EX_TRANSPARENT);
         SetWindowLong(hwnd, GWL_EXSTYLE, style);
+
+        // SetWindowLong alone doesn't reliably make Windows re-evaluate hit-testing against the
+        // new extended style right away — SWP_FRAMECHANGED forces that immediately. Without this,
+        // toggling WS_EX_TRANSPARENT off could lag or silently not take effect for the very click
+        // that was supposed to land right after it, independent of how fast the flip was detected
+        // (2026-09-28: list selection intermittently failed even after switching to a real-time
+        // mouse hook, which ruled out timing/polling as the cause).
+        SetWindowPos(hwnd, IntPtr.Zero, 0, 0, 0, 0,
+            SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE | SWP_FRAMECHANGED);
     }
 }

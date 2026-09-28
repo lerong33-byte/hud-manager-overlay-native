@@ -18,6 +18,7 @@ public partial class LoadoutBayView : UserControl
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
     {
         var q = SearchBox.Text?.Trim() ?? "";
+        ShipList.ItemsSource = null;
         ShipList.ItemsSource = q.Length == 0
             ? _allShips
             : _allShips.Where(s =>

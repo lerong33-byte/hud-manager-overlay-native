@@ -122,6 +122,7 @@ public partial class ShipDetailView : UserControl
                 }
             }
         }
+        WeaponSlotList.ItemsSource = null;
         WeaponSlotList.ItemsSource = guns;
         LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -134,6 +135,7 @@ public partial class ShipDetailView : UserControl
                 ? chosen : stock;
             return new MissileSlotDisplay { Label = $"{m.Label} · {m.Count}x", Options = options, SelectedName = current };
         }).ToList();
+        MissileSlotList.ItemsSource = null;
         MissileSlotList.ItemsSource = racks;
         MissileSlotHeader.Visibility = racks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -146,6 +148,7 @@ public partial class ShipDetailView : UserControl
             components.AddRange(BuildComponentGroup("Quantum Drive", "qd", ship.Comps.QuantumDrives, QuantumDriveCatalog.NamesForSize, saved));
             components.AddRange(BuildComponentGroup("Flight Controller", "flight", ship.Comps.FlightControllers, FlightControllerCatalog.NamesForSize, saved));
         }
+        ComponentList.ItemsSource = null;
         ComponentList.ItemsSource = components;
         ComponentHeader.Visibility = components.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -155,6 +158,7 @@ public partial class ShipDetailView : UserControl
             readOnlyParts.AddRange(BuildReadOnlyGroup("Radar", ship.Comps.Radar));
             readOnlyParts.AddRange(BuildReadOnlyGroup("Life Support", ship.Comps.LifeSupport));
         }
+        ReadOnlyPartList.ItemsSource = null;
         ReadOnlyPartList.ItemsSource = readOnlyParts;
         ReadOnlyPartHeader.Visibility = readOnlyParts.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }

@@ -25,7 +25,17 @@ public partial class PanelHost : Window
     [DllImport("user32.dll")]
     private static extern bool GetCursorPos(out POINT p);
 
-    private readonly DispatcherTimer _poll = new() { Interval = TimeSpan.FromMilliseconds(50) };
+    // A timer poll, no matter how fast, checks cursor position on a fixed schedule that a real
+    // click can outrun: a WM_LBUTTONDOWN delivered while the window is still WS_EX_TRANSPARENT
+    // passes straight through and is gone, unrecoverably, before the next tick ever fires. Even at
+    // 8ms this still intermittently ate real clicks (2026-09-28 bug report: list selection did
+    // nothing, reproduced across every panel). Fixed by driving the hit-test off the actual
+    // WM_MOUSEMOVE stream via a low-level mouse hook instead — that necessarily fires before any
+    // click on the same spot, synchronously, closing the gap a poll can never fully close. The
+    // timer stays as a slow safety net only (covers e.g. a panel appearing/moving under an
+    // already-stationary cursor, which generates no mouse-move to react to).
+    private readonly DispatcherTimer _pollFallback = new() { Interval = TimeSpan.FromMilliseconds(150) };
+    private readonly MouseHook _mouseHook = new();
     private bool _interactive;
     private int _ignoreStreak;
 
@@ -49,8 +59,12 @@ public partial class PanelHost : Window
             Left = 0; Top = 0; Width = dipW; Height = dipH;
         };
 
-        _poll.Tick += Poll_Tick;
-        _poll.Start();
+        _pollFallback.Tick += (_, _) => CheckCursor();
+        _pollFallback.Start();
+        _mouseHook.Move += CheckCursor;
+        _mouseHook.Install();
+
+        Closed += (_, _) => _mouseHook.Dispose();
     }
 
     public PanelChrome AddPanel(string title, UIElement content, double x, double y, double w, double h)
@@ -60,8 +74,23 @@ public partial class PanelHost : Window
         Canvas.SetLeft(chrome, x);
         Canvas.SetTop(chrome, y);
         PanelCanvas.Children.Add(chrome);
-        if (!IsVisible) Show();
+        ReshowIfHidden();
         return chrome;
+    }
+
+    // Closing the last panel drops PanelCanvas.Children to 0, which hides this window (below) —
+    // but _interactive was never reset, so it can still say "true" from the last panel that was
+    // open. Reopening a panel then starts out of sync with the window's real click-through state
+    // until the next flip, i.e. it can silently not respond to clicks the moment it reappears.
+    // Bug reported 2026-09-28: Missions worked, then broke after just closing and reopening it.
+    private void ReshowIfHidden()
+    {
+        if (IsVisible) return;
+        Show();
+        _interactive = false;
+        _ignoreStreak = 0;
+        var hwnd = new WindowInteropHelper(this).Handle;
+        NativeInterop.SetClickThrough(hwnd, clickThrough: true);
     }
 
     // For fixed, non-draggable chrome like the hotbar — still hit-tested for click-through the
@@ -71,12 +100,12 @@ public partial class PanelHost : Window
         Canvas.SetLeft(element, x);
         Canvas.SetTop(element, y);
         PanelCanvas.Children.Add(element);
-        if (!IsVisible) Show();
+        ReshowIfHidden();
     }
 
     public void RemoveElement(UIElement element) => PanelCanvas.Children.Remove(element);
 
-    private void Poll_Tick(object? sender, EventArgs e)
+    private void CheckCursor()
     {
         if (PanelCanvas.Children.Count == 0) { Hide(); return; }
 
@@ -103,12 +132,26 @@ public partial class PanelHost : Window
             }
         }
 
-        // Second hysteresis layer (time): require 2 consecutive polls (100ms) before committing
-        // the flip — also matched to the validated fix, so a single stray sample can't toggle it.
+        // Time hysteresis only guards the EXIT direction (interactive -> click-through), matching
+        // the validated overlay-src fix: that's what prevents flicker from jitter at a panel edge.
+        // Entering must commit on the very first sample that finds the cursor over a panel — any
+        // delay there is a race between "cursor arrives" and "user clicks", and a real click
+        // reliably loses that race (panel silently swallows nothing, click passes through to
+        // whatever's behind it). Bug reported 2026-09-28: clicking any list item did nothing.
         var wantInteractive = nearAny;
         if (wantInteractive == _interactive) { _ignoreStreak = 0; return; }
-        if (++_ignoreStreak < 2) return;
-        _ignoreStreak = 0;
+        if (wantInteractive)
+        {
+            _ignoreStreak = 0;
+        }
+        else if (++_ignoreStreak < 2)
+        {
+            return;
+        }
+        else
+        {
+            _ignoreStreak = 0;
+        }
         _interactive = wantInteractive;
         var hwnd = new WindowInteropHelper(this).Handle;
         NativeInterop.SetClickThrough(hwnd, clickThrough: !_interactive);

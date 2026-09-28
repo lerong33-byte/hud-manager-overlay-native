@@ -106,3 +106,6 @@ Updated as work happens — check here any time for current state without needin
 - ✅ Radar/life-support raw class ids now display as "Stock Radar"/"Stock Life Support" (only `radr_gnrp_s03_idris_temp` was affected of 32 distinct names). Debug build compiles clean; not live-viewed.
 - Weapons DB / Materials / Acquisition search handlers code-reviewed: identical to the verified pattern (ItemsSource reset + case-insensitive Contains). Still not live-clicked.
 - Local `dotnet build -c Release` fails (access denied writing bin\...\HudManagerOverlay.exe — Bitdefender blocks the single-file host). Use `-c Debug` locally; CI builds Release fine.
+
+## 2026-09-28 — stopped for user PC restart
+Installer/portable extract still denied after AV exclusions (per-process blocking, cause unverified). No installed copy on disk right now; use `dotnet build -c Debug`. Full detail + next steps in Claude memory `RESUME-2026-09-28-native-installer-av.md`.

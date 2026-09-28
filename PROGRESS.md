@@ -21,7 +21,7 @@ Updated as work happens — check here any time for current state without needin
 |---|---|---|
 | Ship list + search | ✅ | Selection + detail pane both confirmed firing correctly (verified 2026-09-28 with a blocking diagnostic dialog) — the earlier "doesn't work" reports were the detail pane taking noticeably longer to render than Missions/Blueprints (blank under ~1s, populated after a few seconds), not a real failure. All catalog lookups it uses are cached, so the lag is in WPF layout of the ComboBox-heavy rows, not I/O. |
 | Stats display (speed/hull/shield/weaponry) | ✅ | |
-| Weapon mounts — swap + save | ✅ | |
+| Weapon mounts — swap + save | 🐛 | ⚠️ Dropdown contrast bug 2026-09-28: closed weapon combo boxes show washed-out/low-contrast text on multi-mount ships (e.g. Gladius Pirate's 3 gun rows) — confirmed NOT a style-resolution issue (same `DarkCombo` style, inline Background/Foreground overrides, and an extra render-flush right after populating the list all failed to fix it), and NOT a stale-paint timing issue (waited several seconds, no change). Missile/component combos (same style, same method) render correctly in both open and closed states, and the weapon combo's own dropdown POPUP is correctly styled too — only its closed/collapsed display is affected. Root cause unknown; needs fresh eyes rather than more guessing. |
 | Turret/manned-turret weapon rows | 🔧 | Algorithm validated against all 126 turret ships in ships.json (0 null-size risks) + exact row/label output confirmed for Idris-M (55 rows); still no live UI click |
 | Missile racks — swap + save | ✅ | |
 | Components: power plant/shield/cooler/qdrive — swap + save | ✅ | |

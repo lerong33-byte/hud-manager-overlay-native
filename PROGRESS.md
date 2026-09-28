@@ -22,7 +22,7 @@ Updated as work happens — check here any time for current state without needin
 | Ship list + search | ✅ | |
 | Stats display (speed/hull/shield/weaponry) | ✅ | |
 | Weapon mounts — swap + save | ✅ | |
-| Turret/manned-turret weapon rows | 🔧 | Code-review confidence only, no live click yet |
+| Turret/manned-turret weapon rows | 🔧 | Algorithm validated against all 126 turret ships in ships.json (0 null-size risks) + exact row/label output confirmed for Idris-M (55 rows); still no live UI click |
 | Missile racks — swap + save | ✅ | |
 | Components: power plant/shield/cooler/qdrive — swap + save | ✅ | |
 | Components: flight controller — swap + save | 🔧 | Just built, not live-clicked |

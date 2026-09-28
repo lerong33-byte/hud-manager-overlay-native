@@ -1,7 +1,13 @@
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace HudManagerOverlay;
+
+// Flattened display shapes for the XAML ItemsControls — keeps binding paths simple without
+// putting presentation logic (gimbal/fixed label, "2x Ignite II") on the data model itself.
+public sealed record WeaponSlotDisplay(string Label, int Size, string MountKind, string DefaultName);
+public sealed record MissileSlotDisplay(string Label, string Summary);
 
 public partial class ShipDetailView : UserControl
 {
@@ -52,6 +58,16 @@ public partial class ShipDetailView : UserControl
             MissileDmgText.Text = Fmt(ship.Weaponry!.MissileDmg);
             MissileCountText.Text = Fmt(ship.Weaponry.MissileCount);
         }
+
+        var guns = ship.Slots.Where(s => s.Kind == "gun").Select(s => new WeaponSlotDisplay(
+            s.Label, s.Size, s.Fixed ? " Fixed" : s.Gimbal ? " Gimbal" : "", s.DefaultName ?? "Empty")).ToList();
+        WeaponSlotList.ItemsSource = guns;
+        LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        var racks = ship.Missiles.Select(m => new MissileSlotDisplay(
+            m.Label, m.Count > 0 ? $"{m.Count}x {m.DefaultName ?? "Empty"}" : "Empty")).ToList();
+        MissileSlotList.ItemsSource = racks;
+        MissileSlotHeader.Visibility = racks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private static string Fmt(double? v, string suffix = "") =>

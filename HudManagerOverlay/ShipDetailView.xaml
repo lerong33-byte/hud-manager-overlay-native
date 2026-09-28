@@ -129,6 +129,39 @@
                             <TextBlock x:Name="MissileCountText" Style="{StaticResource StatValue}"/>
                         </StackPanel>
                     </Grid>
+
+                    <TextBlock x:Name="LoadoutHeader" Text="WEAPON MOUNTS" Style="{StaticResource SectionHeader}"/>
+                    <ItemsControl x:Name="WeaponSlotList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#22000000" CornerRadius="4" Padding="6,4" Margin="0,0,0,3">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="Consolas" FontSize="10" Foreground="{StaticResource TextDim}">
+                                            <Run Text="{Binding Label}"/>
+                                            <Run Text=" · S"/>
+                                            <Run Text="{Binding Size}"/>
+                                            <Run Text="{Binding MountKind}"/>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding DefaultName}" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <TextBlock x:Name="MissileSlotHeader" Text="MISSILE RACKS" Style="{StaticResource SectionHeader}"/>
+                    <ItemsControl x:Name="MissileSlotList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#22000000" CornerRadius="4" Padding="6,4" Margin="0,0,0,3">
+                                    <StackPanel>
+                                        <TextBlock FontFamily="Consolas" FontSize="10" Foreground="{StaticResource TextDim}" Text="{Binding Label}"/>
+                                        <TextBlock Text="{Binding Summary}" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>

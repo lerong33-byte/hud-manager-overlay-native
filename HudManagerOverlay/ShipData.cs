@@ -32,6 +32,28 @@ public sealed class ShipWeaponry
     [JsonPropertyName("missile_count")] public double? MissileCount { get; set; }
 }
 
+public sealed class WeaponSlot
+{
+    [JsonPropertyName("kind")] public string Kind { get; set; } = "";
+    [JsonPropertyName("lbl")] public string Label { get; set; } = "";
+    [JsonPropertyName("sz")] public int Size { get; set; }
+    [JsonPropertyName("gimbal")] public bool Gimbal { get; set; }
+    [JsonPropertyName("fixed")] public bool Fixed { get; set; }
+    [JsonPropertyName("count")] public int Count { get; set; } = 1;
+    [JsonPropertyName("defaultName")] public string? DefaultName { get; set; }
+    [JsonPropertyName("locked")] public bool Locked { get; set; }
+}
+
+public sealed class MissileSlot
+{
+    [JsonPropertyName("lbl")] public string Label { get; set; } = "";
+    [JsonPropertyName("sz")] public int Size { get; set; }
+    [JsonPropertyName("count")] public int Count { get; set; }
+    [JsonPropertyName("defaultName")] public string? DefaultName { get; set; }
+    [JsonPropertyName("podName")] public string? PodName { get; set; }
+    [JsonPropertyName("locked")] public bool Locked { get; set; }
+}
+
 public sealed class Ship
 {
     [JsonPropertyName("name")] public string Name { get; set; } = "";
@@ -47,6 +69,8 @@ public sealed class Ship
     [JsonPropertyName("crew")] public ShipCrew? Crew { get; set; }
     [JsonPropertyName("shield")] public ShipShield? Shield { get; set; }
     [JsonPropertyName("weaponry")] public ShipWeaponry? Weaponry { get; set; }
+    [JsonPropertyName("slots")] public List<WeaponSlot> Slots { get; set; } = new();
+    [JsonPropertyName("missiles")] public List<MissileSlot> Missiles { get; set; } = new();
 }
 
 internal static class ShipData

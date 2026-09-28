@@ -101,3 +101,8 @@ Updated as work happens — check here any time for current state without needin
 ## 2026-09-28 — signing PARKED (user chose to defer)
 - CI workflow now signs via Azure Trusted Signing IF secrets are set (commit 65905bc). The three secrets AZURE_TENANT_ID/CLIENT_ID/CLIENT_SECRET exist on this repo but are EMPTY (set via `gh secret set` with no stdin) — real values must be entered by the user (Azure portal → App registrations; or browser Settings → Secrets → Actions). v0.1.4 built UNSIGNED and was published non-draft by mistake (private repo).
 - Bitdefender blocks installer writes (Update.exe / shortcut / uninstall registry key); portable install at C:\HudOverlayTest\current runs fine. Use portable for dev testing until signed.
+
+## 2026-09-28 (late)
+- ✅ Radar/life-support raw class ids now display as "Stock Radar"/"Stock Life Support" (only `radr_gnrp_s03_idris_temp` was affected of 32 distinct names). Debug build compiles clean; not live-viewed.
+- Weapons DB / Materials / Acquisition search handlers code-reviewed: identical to the verified pattern (ItemsSource reset + case-insensitive Contains). Still not live-clicked.
+- Local `dotnet build -c Release` fails (access denied writing bin\...\HudManagerOverlay.exe — Bitdefender blocks the single-file host). Use `-c Debug` locally; CI builds Release fine.

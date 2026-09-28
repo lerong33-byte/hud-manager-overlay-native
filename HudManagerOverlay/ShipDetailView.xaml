@@ -131,7 +131,7 @@
                     </Grid>
 
                     <TextBlock x:Name="LoadoutHeader" Text="WEAPON MOUNTS" Style="{StaticResource SectionHeader}"/>
-                    <TextBlock Text="Swap shows other weapons that fit this mount size — display only, doesn't change anything in-game (no game-facing loadout system yet)."
+                    <TextBlock Text="Your choice here is saved and remembered next time — it doesn't change anything in Star Citizen itself (no game-facing loadout system yet)."
                                FontFamily="Consolas" FontSize="9" Foreground="{StaticResource TextDim}" TextWrapping="Wrap" Margin="0,0,0,6"/>
                     <ItemsControl x:Name="WeaponSlotList">
                         <ItemsControl.ItemTemplate>
@@ -145,6 +145,7 @@
                                             <Run Text="{Binding MountKind}"/>
                                         </TextBlock>
                                         <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedName, Mode=TwoWay}"
+                                                  SelectionChanged="WeaponCombo_SelectionChanged"
                                                   Background="#1A2530" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"
                                                   BorderBrush="{StaticResource TextDim}" Margin="0,2,0,0"/>
                                     </StackPanel>

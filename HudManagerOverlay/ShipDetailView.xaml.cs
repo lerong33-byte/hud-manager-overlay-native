@@ -19,10 +19,13 @@ public sealed class WeaponSlotDisplay
     public List<string> Options { get; init; } = new();
     public string SelectedName { get; set; } = "";
 }
+
 public sealed record MissileSlotDisplay(string Label, string Summary);
 
 public partial class ShipDetailView : UserControl
 {
+    private string _currentShipName = "";
+
     public ShipDetailView()
     {
         InitializeComponent();
@@ -32,6 +35,7 @@ public partial class ShipDetailView : UserControl
     {
         NoSelectionText.Visibility = Visibility.Collapsed;
         DetailPanel.Visibility = Visibility.Visible;
+        _currentShipName = ship.Name;
 
         ShipNameText.Text = ship.Name;
         ShipSubText.Text = $"{ship.Manufacturer} · {ship.Role} · {ship.Size}";
@@ -71,11 +75,16 @@ public partial class ShipDetailView : UserControl
             MissileCountText.Text = Fmt(ship.Weaponry.MissileCount);
         }
 
+        var saved = LoadoutStore.Get(ship.Name);
         var guns = ship.Slots.Where(s => s.Kind == "gun").Select(s =>
         {
             var options = WeaponCatalog.NamesForSize(s.Size);
-            var current = s.DefaultName ?? "Empty";
-            if (!options.Contains(current)) options.Insert(0, current); // keep the ship's stock weapon selectable even if it's not in the trimmed catalog
+            var stock = s.DefaultName ?? "Empty";
+            if (!options.Contains(stock)) options.Insert(0, stock); // keep the ship's stock weapon selectable even if it's not in the trimmed catalog
+            // A previously saved choice for this exact slot wins over stock, but only if it's
+            // still a valid option for this mount size (catalog/ship data may have changed).
+            var current = saved.WeaponBySlotLabel.TryGetValue(s.Label, out var chosen) && options.Contains(chosen)
+                ? chosen : stock;
             return new WeaponSlotDisplay
             {
                 Label = s.Label, Size = s.Size,
@@ -94,4 +103,15 @@ public partial class ShipDetailView : UserControl
 
     private static string Fmt(double? v, string suffix = "") =>
         v.HasValue ? $"{v.Value:N0}{suffix}" : "—";
+
+    // Fires on both a real user pick AND the initial binding setting SelectedName from ShowShip
+    // — harmless either way, since re-saving the same value that's already saved is a no-op in
+    // effect. Reads the slot straight off the ComboBox's own DataContext rather than tracking
+    // index/sender lookups, since the ItemsControl already gives each row its own bound instance.
+    private void WeaponCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ComboBox { DataContext: WeaponSlotDisplay slot }) return;
+        if (string.IsNullOrEmpty(_currentShipName) || string.IsNullOrEmpty(slot.SelectedName)) return;
+        LoadoutStore.SetWeapon(_currentShipName, slot.Label, slot.SelectedName);
+    }
 }

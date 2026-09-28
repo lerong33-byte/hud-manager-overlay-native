@@ -12,3 +12,4 @@ global using Brushes = System.Windows.Media.Brushes;
 global using FontFamily = System.Windows.Media.FontFamily;
 global using HorizontalAlignment = System.Windows.HorizontalAlignment;
 global using Button = System.Windows.Controls.Button;
+global using ComboBox = System.Windows.Controls.ComboBox;

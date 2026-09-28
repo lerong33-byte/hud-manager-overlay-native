@@ -55,6 +55,21 @@ public sealed class MissileSlot
     [JsonPropertyName("locked")] public bool Locked { get; set; }
 }
 
+public sealed class ComponentPart
+{
+    [JsonPropertyName("name")] public string? Name { get; set; }
+    [JsonPropertyName("class_name")] public string? ClassName { get; set; }
+    [JsonPropertyName("sz")] public int? Size { get; set; } // null for some placeholder slots (e.g. unused jumpdrive) — never assume present
+}
+
+public sealed class ShipComponents
+{
+    [JsonPropertyName("pp")] public List<ComponentPart> PowerPlants { get; set; } = new();
+    [JsonPropertyName("sg")] public List<ComponentPart> Shields { get; set; } = new();
+    [JsonPropertyName("cooler")] public List<ComponentPart> Coolers { get; set; } = new();
+    [JsonPropertyName("qd")] public List<ComponentPart> QuantumDrives { get; set; } = new();
+}
+
 public sealed class Ship
 {
     [JsonPropertyName("name")] public string Name { get; set; } = "";
@@ -72,6 +87,7 @@ public sealed class Ship
     [JsonPropertyName("weaponry")] public ShipWeaponry? Weaponry { get; set; }
     [JsonPropertyName("slots")] public List<WeaponSlot> Slots { get; set; } = new();
     [JsonPropertyName("missiles")] public List<MissileSlot> Missiles { get; set; } = new();
+    [JsonPropertyName("comps")] public ShipComponents? Comps { get; set; }
 }
 
 internal static class ShipData

@@ -1,0 +1,258 @@
+[
+  {
+    "name": "Castra",
+    "size": 0
+  },
+  {
+    "name": "PIN",
+    "size": 0
+  },
+  {
+    "name": "5SA 'Rhada",
+    "size": 1
+  },
+  {
+    "name": "6SA 'Arbiter",
+    "size": 1
+  },
+  {
+    "name": "7SA 'Concord",
+    "size": 1
+  },
+  {
+    "name": "AllStop",
+    "size": 1
+  },
+  {
+    "name": "Bulwark",
+    "size": 1
+  },
+  {
+    "name": "Cloak",
+    "size": 1
+  },
+  {
+    "name": "Falco",
+    "size": 1
+  },
+  {
+    "name": "ForceWall",
+    "size": 1
+  },
+  {
+    "name": "FR-66",
+    "size": 1
+  },
+  {
+    "name": "Guardian",
+    "size": 1
+  },
+  {
+    "name": "HEX",
+    "size": 1
+  },
+  {
+    "name": "INK",
+    "size": 1
+  },
+  {
+    "name": "Jaghte",
+    "size": 1
+  },
+  {
+    "name": "Mirage",
+    "size": 1
+  },
+  {
+    "name": "Palisade",
+    "size": 1
+  },
+  {
+    "name": "SecureHyde",
+    "size": 1
+  },
+  {
+    "name": "Shimmer",
+    "size": 1
+  },
+  {
+    "name": "Steward",
+    "size": 1
+  },
+  {
+    "name": "Suldrath",
+    "size": 1
+  },
+  {
+    "name": "Targa",
+    "size": 1
+  },
+  {
+    "name": "Veil",
+    "size": 1
+  },
+  {
+    "name": "WEB",
+    "size": 1
+  },
+  {
+    "name": "5MA 'Chimalli",
+    "size": 2
+  },
+  {
+    "name": "6MA 'Kozane",
+    "size": 2
+  },
+  {
+    "name": "7MA 'Lorica",
+    "size": 2
+  },
+  {
+    "name": "Armada",
+    "size": 2
+  },
+  {
+    "name": "Aspis",
+    "size": 2
+  },
+  {
+    "name": "Bamoty",
+    "size": 2
+  },
+  {
+    "name": "BLOC",
+    "size": 2
+  },
+  {
+    "name": "Citadel",
+    "size": 2
+  },
+  {
+    "name": "CoverAll",
+    "size": 2
+  },
+  {
+    "name": "FR-76",
+    "size": 2
+  },
+  {
+    "name": "FullStop",
+    "size": 2
+  },
+  {
+    "name": "Haltur",
+    "size": 2
+  },
+  {
+    "name": "Obscura",
+    "size": 2
+  },
+  {
+    "name": "Rampart",
+    "size": 2
+  },
+  {
+    "name": "RPEL",
+    "size": 2
+  },
+  {
+    "name": "SecureShield",
+    "size": 2
+  },
+  {
+    "name": "Sheut",
+    "size": 2
+  },
+  {
+    "name": "Shroud",
+    "size": 2
+  },
+  {
+    "name": "STOP",
+    "size": 2
+  },
+  {
+    "name": "Sukoran",
+    "size": 2
+  },
+  {
+    "name": "Trenta",
+    "size": 2
+  },
+  {
+    "name": "Umbra",
+    "size": 2
+  },
+  {
+    "name": "5CA 'Akura",
+    "size": 3
+  },
+  {
+    "name": "6CA 'Bila",
+    "size": 3
+  },
+  {
+    "name": "7CA 'Nargun",
+    "size": 3
+  },
+  {
+    "name": "ARMOR",
+    "size": 3
+  },
+  {
+    "name": "Barbican",
+    "size": 3
+  },
+  {
+    "name": "FR-86",
+    "size": 3
+  },
+  {
+    "name": "FullBlock",
+    "size": 3
+  },
+  {
+    "name": "GUARD",
+    "size": 3
+  },
+  {
+    "name": "HAVEN",
+    "size": 3
+  },
+  {
+    "name": "Parapet",
+    "size": 3
+  },
+  {
+    "name": "SecureScreen",
+    "size": 3
+  },
+  {
+    "name": "Stronghold",
+    "size": 3
+  },
+  {
+    "name": "SureStop",
+    "size": 3
+  },
+  {
+    "name": "Ward",
+    "size": 3
+  },
+  {
+    "name": "Glacis",
+    "size": 4
+  },
+  {
+    "name": "Glacis",
+    "size": 4
+  },
+  {
+    "name": "Holdstrong",
+    "size": 4
+  },
+  {
+    "name": "RS-Barrier",
+    "size": 4
+  }
+]

@@ -1,0 +1,294 @@
+[
+  {
+    "name": "Cryo-Star SL",
+    "size": 0
+  },
+  {
+    "name": "Fridan",
+    "size": 0
+  },
+  {
+    "name": "Frost-Star SL",
+    "size": 0
+  },
+  {
+    "name": "Kelvid",
+    "size": 0
+  },
+  {
+    "name": "Tepilo",
+    "size": 0
+  },
+  {
+    "name": "Winter-Star SL",
+    "size": 0
+  },
+  {
+    "name": "ArcticStorm",
+    "size": 1
+  },
+  {
+    "name": "Berian",
+    "size": 1
+  },
+  {
+    "name": "BlastChill",
+    "size": 1
+  },
+  {
+    "name": "Bracer",
+    "size": 1
+  },
+  {
+    "name": "Cryo-Star",
+    "size": 1
+  },
+  {
+    "name": "Eco-Flow",
+    "size": 1
+  },
+  {
+    "name": "Endo",
+    "size": 1
+  },
+  {
+    "name": "FlashFreeze",
+    "size": 1
+  },
+  {
+    "name": "Frost-Star",
+    "size": 1
+  },
+  {
+    "name": "Gelid",
+    "size": 1
+  },
+  {
+    "name": "Glacier",
+    "size": 1
+  },
+  {
+    "name": "HeatSafe",
+    "size": 1
+  },
+  {
+    "name": "Hydrocel",
+    "size": 1
+  },
+  {
+    "name": "IcePlunge",
+    "size": 1
+  },
+  {
+    "name": "Polar",
+    "size": 1
+  },
+  {
+    "name": "QuikCool",
+    "size": 1
+  },
+  {
+    "name": "SnowBlind",
+    "size": 1
+  },
+  {
+    "name": "Thermax",
+    "size": 1
+  },
+  {
+    "name": "Tundra",
+    "size": 1
+  },
+  {
+    "name": "Ultra-Flow",
+    "size": 1
+  },
+  {
+    "name": "VaporBlock",
+    "size": 1
+  },
+  {
+    "name": "Winter-Star",
+    "size": 1
+  },
+  {
+    "name": "ZeroRush",
+    "size": 1
+  },
+  {
+    "name": "AbsoluteZero",
+    "size": 2
+  },
+  {
+    "name": "Arctic",
+    "size": 2
+  },
+  {
+    "name": "Aufeis",
+    "size": 2
+  },
+  {
+    "name": "Avalanche",
+    "size": 2
+  },
+  {
+    "name": "Boreal",
+    "size": 2
+  },
+  {
+    "name": "ColdSnap",
+    "size": 2
+  },
+  {
+    "name": "CoolCore",
+    "size": 2
+  },
+  {
+    "name": "Cryo-Star EX",
+    "size": 2
+  },
+  {
+    "name": "Frost-Star EX",
+    "size": 2
+  },
+  {
+    "name": "FullFrost",
+    "size": 2
+  },
+  {
+    "name": "Graupel",
+    "size": 2
+  },
+  {
+    "name": "HeatSink",
+    "size": 2
+  },
+  {
+    "name": "HydroJet",
+    "size": 2
+  },
+  {
+    "name": "IceBox",
+    "size": 2
+  },
+  {
+    "name": "IceDive",
+    "size": 2
+  },
+  {
+    "name": "NightFall",
+    "size": 2
+  },
+  {
+    "name": "Permafrost",
+    "size": 2
+  },
+  {
+    "name": "RapidCool",
+    "size": 2
+  },
+  {
+    "name": "Snowfall",
+    "size": 2
+  },
+  {
+    "name": "Snowpack",
+    "size": 2
+  },
+  {
+    "name": "Taiga",
+    "size": 2
+  },
+  {
+    "name": "WhiteOut",
+    "size": 2
+  },
+  {
+    "name": "Winter-Star EX",
+    "size": 2
+  },
+  {
+    "name": "Blizzard",
+    "size": 3
+  },
+  {
+    "name": "Chill-Max",
+    "size": 3
+  },
+  {
+    "name": "ColdSurge",
+    "size": 3
+  },
+  {
+    "name": "Cryo-Star XL",
+    "size": 3
+  },
+  {
+    "name": "Draug",
+    "size": 3
+  },
+  {
+    "name": "Elsen",
+    "size": 3
+  },
+  {
+    "name": "Frost-Star XL",
+    "size": 3
+  },
+  {
+    "name": "FrostBite",
+    "size": 3
+  },
+  {
+    "name": "FrostBurn",
+    "size": 3
+  },
+  {
+    "name": "Galinstan",
+    "size": 3
+  },
+  {
+    "name": "Hydropulse",
+    "size": 3
+  },
+  {
+    "name": "Ice-Flush",
+    "size": 3
+  },
+  {
+    "name": "Kragen",
+    "size": 3
+  },
+  {
+    "name": "Mercury",
+    "size": 3
+  },
+  {
+    "name": "Tempest",
+    "size": 3
+  },
+  {
+    "name": "ThermalCore",
+    "size": 3
+  },
+  {
+    "name": "Winter-Star XL",
+    "size": 3
+  },
+  {
+    "name": "Algid",
+    "size": 4
+  },
+  {
+    "name": "Exotherm",
+    "size": 4
+  },
+  {
+    "name": "Serac",
+    "size": 4
+  },
+  {
+    "name": "Serac",
+    "size": 4
+  }
+]

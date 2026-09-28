@@ -27,6 +27,14 @@ public sealed class MissileSlotDisplay
     public string SelectedName { get; set; } = "";
 }
 
+public sealed class ComponentSlotDisplay
+{
+    public string Label { get; init; } = "";
+    public string Key { get; init; } = ""; // "{kind}-{index}", e.g. "sg-1" — see ShipLoadoutChoice.ComponentByKey
+    public List<string> Options { get; init; } = new();
+    public string SelectedName { get; set; } = "";
+}
+
 public partial class ShipDetailView : UserControl
 {
     private string _currentShipName = "";
@@ -111,6 +119,40 @@ public partial class ShipDetailView : UserControl
         }).ToList();
         MissileSlotList.ItemsSource = racks;
         MissileSlotHeader.Visibility = racks.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        var components = new List<ComponentSlotDisplay>();
+        if (ship.Comps != null)
+        {
+            components.AddRange(BuildComponentGroup("Power Plant", "pp", ship.Comps.PowerPlants, PowerPlantCatalog.NamesForSize, saved));
+            components.AddRange(BuildComponentGroup("Shield Generator", "sg", ship.Comps.Shields, ShieldCatalog.NamesForSize, saved));
+            components.AddRange(BuildComponentGroup("Cooler", "cooler", ship.Comps.Coolers, CoolerCatalog.NamesForSize, saved));
+            components.AddRange(BuildComponentGroup("Quantum Drive", "qd", ship.Comps.QuantumDrives, QuantumDriveCatalog.NamesForSize, saved));
+        }
+        ComponentList.ItemsSource = components;
+        ComponentHeader.Visibility = components.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    // One method for all 4 component kinds (power plant, shield, cooler, quantum drive) since the
+    // shape is identical: a ship can have several of the same kind, none of which have a real
+    // label in ships.json, so "{kind}-{index}" becomes the persistence key AND the display label.
+    private static List<ComponentSlotDisplay> BuildComponentGroup(
+        string displayName, string kind, List<ComponentPart> parts,
+        System.Func<int, List<string>> namesForSize, ShipLoadoutChoice saved)
+    {
+        var result = new List<ComponentSlotDisplay>();
+        for (int i = 0; i < parts.Count; i++)
+        {
+            var part = parts[i];
+            if (part.Size is not int size) continue; // unused placeholder slot (e.g. no jumpdrive fitted) — nothing to pick from
+            var key = $"{kind}-{i}";
+            var options = namesForSize(size);
+            var stock = part.Name ?? "Empty";
+            if (!options.Contains(stock)) options.Insert(0, stock);
+            var current = saved.ComponentByKey.TryGetValue(key, out var chosen) && options.Contains(chosen) ? chosen : stock;
+            var label = parts.Count > 1 ? $"{displayName} {i + 1}" : displayName;
+            result.Add(new ComponentSlotDisplay { Label = label, Key = key, Options = options, SelectedName = current });
+        }
+        return result;
     }
 
     private static string Fmt(double? v, string suffix = "") =>
@@ -132,5 +174,12 @@ public partial class ShipDetailView : UserControl
         if (sender is not ComboBox { DataContext: MissileSlotDisplay slot }) return;
         if (string.IsNullOrEmpty(_currentShipName) || string.IsNullOrEmpty(slot.SelectedName)) return;
         LoadoutStore.SetMissile(_currentShipName, slot.Label, slot.SelectedName);
+    }
+
+    private void ComponentCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (sender is not ComboBox { DataContext: ComponentSlotDisplay slot }) return;
+        if (string.IsNullOrEmpty(_currentShipName) || string.IsNullOrEmpty(slot.SelectedName)) return;
+        LoadoutStore.SetComponent(_currentShipName, slot.Key, slot.SelectedName);
     }
 }

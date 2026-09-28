@@ -1,0 +1,302 @@
+[
+  {
+    "name": "Defiant",
+    "size": 0
+  },
+  {
+    "name": "DuraJet",
+    "size": 0
+  },
+  {
+    "name": "IonWave",
+    "size": 0
+  },
+  {
+    "name": "Jennet",
+    "size": 0
+  },
+  {
+    "name": "Radix",
+    "size": 0
+  },
+  {
+    "name": "Steadfast",
+    "size": 0
+  },
+  {
+    "name": "Breton",
+    "size": 1
+  },
+  {
+    "name": "Charger",
+    "size": 1
+  },
+  {
+    "name": "DeltaMax",
+    "size": 1
+  },
+  {
+    "name": "DynaFlux",
+    "size": 1
+  },
+  {
+    "name": "Endurance",
+    "size": 1
+  },
+  {
+    "name": "Fierell Cascade",
+    "size": 1
+  },
+  {
+    "name": "Fortitude",
+    "size": 1
+  },
+  {
+    "name": "HyperGen",
+    "size": 1
+  },
+  {
+    "name": "IonBurst",
+    "size": 1
+  },
+  {
+    "name": "JS-300",
+    "size": 1
+  },
+  {
+    "name": "LightBlossom",
+    "size": 1
+  },
+  {
+    "name": "LumaCore",
+    "size": 1
+  },
+  {
+    "name": "MagnaBloom",
+    "size": 1
+  },
+  {
+    "name": "OverDrive",
+    "size": 1
+  },
+  {
+    "name": "PowerBolt",
+    "size": 1
+  },
+  {
+    "name": "QuadraCell",
+    "size": 1
+  },
+  {
+    "name": "Regulus",
+    "size": 1
+  },
+  {
+    "name": "Roughneck",
+    "size": 1
+  },
+  {
+    "name": "Slipstream",
+    "size": 1
+  },
+  {
+    "name": "SonicLite",
+    "size": 1
+  },
+  {
+    "name": "StarHeart",
+    "size": 1
+  },
+  {
+    "name": "SunFlare",
+    "size": 1
+  },
+  {
+    "name": "WhiteRose",
+    "size": 1
+  },
+  {
+    "name": "ZapJet",
+    "size": 1
+  },
+  {
+    "name": "Bolide",
+    "size": 2
+  },
+  {
+    "name": "Cirrus",
+    "size": 2
+  },
+  {
+    "name": "DayBreak",
+    "size": 2
+  },
+  {
+    "name": "Diligence",
+    "size": 2
+  },
+  {
+    "name": "Eclipse",
+    "size": 2
+  },
+  {
+    "name": "ExoGen",
+    "size": 2
+  },
+  {
+    "name": "FullForce",
+    "size": 2
+  },
+  {
+    "name": "GammaMax",
+    "size": 2
+  },
+  {
+    "name": "Genoa",
+    "size": 2
+  },
+  {
+    "name": "IonSurge",
+    "size": 2
+  },
+  {
+    "name": "JS-400",
+    "size": 2
+  },
+  {
+    "name": "Lotus",
+    "size": 2
+  },
+  {
+    "name": "LuxCore",
+    "size": 2
+  },
+  {
+    "name": "Maelstrom",
+    "size": 2
+  },
+  {
+    "name": "QuadraCell MT",
+    "size": 2
+  },
+  {
+    "name": "Radiance",
+    "size": 2
+  },
+  {
+    "name": "Sedulity",
+    "size": 2
+  },
+  {
+    "name": "SolarFlare",
+    "size": 2
+  },
+  {
+    "name": "SparkJet",
+    "size": 2
+  },
+  {
+    "name": "StarBurn",
+    "size": 2
+  },
+  {
+    "name": "Trommel",
+    "size": 2
+  },
+  {
+    "name": "TurboDrive",
+    "size": 2
+  },
+  {
+    "name": "UltraFlux",
+    "size": 2
+  },
+  {
+    "name": "Vortex",
+    "size": 2
+  },
+  {
+    "name": "Celestial",
+    "size": 3
+  },
+  {
+    "name": "Centurion",
+    "size": 3
+  },
+  {
+    "name": "Drassik",
+    "size": 3
+  },
+  {
+    "name": "Durango",
+    "size": 3
+  },
+  {
+    "name": "Fulgur",
+    "size": 3
+  },
+  {
+    "name": "FullForce Pro",
+    "size": 3
+  },
+  {
+    "name": "Ginzel",
+    "size": 3
+  },
+  {
+    "name": "IonSurge Pro",
+    "size": 3
+  },
+  {
+    "name": "JS-500",
+    "size": 3
+  },
+  {
+    "name": "MegaFlux",
+    "size": 3
+  },
+  {
+    "name": "NewDawn",
+    "size": 3
+  },
+  {
+    "name": "QuadraCell MX",
+    "size": 3
+  },
+  {
+    "name": "Reliance",
+    "size": 3
+  },
+  {
+    "name": "SmartGen",
+    "size": 3
+  },
+  {
+    "name": "SparkJet Pro",
+    "size": 3
+  },
+  {
+    "name": "SuperDrive",
+    "size": 3
+  },
+  {
+    "name": "TigerLilly",
+    "size": 3
+  },
+  {
+    "name": "Idris Power Plant",
+    "size": 4
+  },
+  {
+    "name": "Reclaimer Power Plant",
+    "size": 4
+  },
+  {
+    "name": "Stellate",
+    "size": 4
+  },
+  {
+    "name": "Stellate",
+    "size": 4
+  }
+]

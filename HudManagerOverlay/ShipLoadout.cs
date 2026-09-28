@@ -10,6 +10,10 @@ public class ShipLoadoutChoice
     public string ShipName { get; set; } = "";
     public Dictionary<string, string> WeaponBySlotLabel { get; set; } = new();
     public Dictionary<string, string> MissileBySlotLabel { get; set; } = new();
+    // Keyed by "{kind}-{index}" (e.g. "sg-0", "sg-1", "cooler-0") since a ship can have more than
+    // one of the same component type and ships.json doesn't give components their own labels
+    // the way weapon/missile slots do.
+    public Dictionary<string, string> ComponentByKey { get; set; } = new();
 }
 
 public static class LoadoutStore
@@ -79,6 +83,20 @@ public static class LoadoutStore
         }
 
         choice.MissileBySlotLabel[slotLabel] = missileName;
+        Save();
+    }
+
+    public static void SetComponent(string shipName, string key, string partName)
+    {
+        EnsureLoaded();
+
+        if (!_cache!.TryGetValue(shipName, out var choice))
+        {
+            choice = new ShipLoadoutChoice { ShipName = shipName };
+            _cache[shipName] = choice;
+        }
+
+        choice.ComponentByKey[key] = partName;
         Save();
     }
 

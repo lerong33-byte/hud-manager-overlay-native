@@ -19,7 +19,7 @@ Updated as work happens — check here any time for current state without needin
 ## Ship Loadout Bay (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Ship list + search | ✅ | |
+| Ship list + search | 🔧 | User confirmed working once (2026-09-28, pre-fix build); my own automated click testing on this specific list failed 4/4 attempts post-fix (Missions/Blueprints passed the same test reliably) — unclear if that's a real regression or a synthetic-input quirk. **Needs one real-hands retest.** |
 | Stats display (speed/hull/shield/weaponry) | ✅ | |
 | Weapon mounts — swap + save | ✅ | |
 | Turret/manned-turret weapon rows | 🔧 | Algorithm validated against all 126 turret ships in ships.json (0 null-size risks) + exact row/label output confirmed for Idris-M (55 rows); still no live UI click |
@@ -27,6 +27,8 @@ Updated as work happens — check here any time for current state without needin
 | Components: power plant/shield/cooler/qdrive — swap + save | ✅ | |
 | Components: flight controller — swap + save | 🔧 | Just built, not live-clicked |
 | Radar / life support — read-only display | 🔧 | Just built, not live-clicked |
+
+⚠️ 2026-09-28: found and fixed two app-wide bugs that were breaking selection on every panel, not just this one (see the writeup right below this table). If ships stop responding again, it's worth re-checking those before assuming a new bug.
 
 ## Missions (panel)
 | Module | Status | Notes |
@@ -42,31 +44,33 @@ Updated as work happens — check here any time for current state without needin
 ## Blueprints (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data model + loader | 🔧 | Loads 1606 blueprints, app stays up (smoke-tested) |
-| List + search + detail (craft time, ingredients, sources) | 🔧 | Real ingredient list from crafting-enriched.json wired in; not live-clicked |
-| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Data model + loader | ✅ | 1606 blueprints load fine |
+| List + search + detail (craft time, ingredients, sources) | ✅ | Live-verified 2026-09-28 end to end — select a row, ingredients + unlock sources populate correctly |
+| Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 |
 | Got-it tracking / mission cross-reference (old panel had this) | ⬜ | Deliberately deferred — v1 is browse-only |
+
+⚠️ Data quality (cosmetic, not a bug): a few blueprint names are raw placeholder strings, e.g. `<= PLACEHOLDER =>`. Same class of issue as the Missions template-string note above.
 
 ## Weapons DB (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data extraction (damage/fireRate/DPS computed from erkul-weapons.json) | 🔧 | 155 entries |
-| List UI (search + DPS sort) | 🔧 | Built, not live-clicked |
-| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Data extraction (damage/fireRate/DPS computed from erkul-weapons.json) | ✅ | 155 entries |
+| List UI (search + DPS sort) | 🔧 | Search-refresh bug fixed 2026-09-28 (same ItemsSource issue as other panels); not yet live-clicked to confirm |
+| Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 (opens, doesn't crash) |
 
 ## Materials (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data extraction (26 materials, tier/RS/mineable) | 🔧 | |
-| List UI (search + RS sort) | 🔧 | Built, not live-clicked |
-| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Data extraction (26 materials, tier/RS/mineable) | ✅ | |
+| List UI (search + RS sort) | 🔧 | Search-refresh bug fixed 2026-09-28; not yet live-clicked to confirm |
+| Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 (opens, doesn't crash) |
 
 ## Acquisition (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data (101 components, type + buy locations) | 🔧 | |
-| List UI (search) | 🔧 | Built, not live-clicked |
-| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Data (101 components, type + buy locations) | ✅ | Fixed crash 2026-09-28: 4 stray comment strings (`_weapons_doc` etc.) mixed into the items dictionary were crashing the whole app on open |
+| List UI (search) | 🔧 | Search-refresh bug fixed 2026-09-28; not yet live-clicked to confirm |
+| Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 (opens, doesn't crash) |
 
 ## Not started
 - Every other Electron panel: media, Live Kit, admin/live Game.log, etc.

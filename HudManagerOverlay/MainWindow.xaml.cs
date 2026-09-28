@@ -215,7 +215,7 @@ public partial class MainWindow : Window
         var saved = _settings.Panels.GetValueOrDefault("loadout-bay");
         var (x, y, w, h) = saved != null
             ? (saved.X, saved.Y, saved.W, saved.H)
-            : (200, 150, 380, 480);
+            : (200, 150, 640, 480);
         var chrome = _panelHost.AddPanel("SHIP LOADOUT BAY", new LoadoutBayView(), x, y, w, h);
         chrome.CloseRequested += () => _settings.Panels["loadout-bay"] = new PanelState
         {

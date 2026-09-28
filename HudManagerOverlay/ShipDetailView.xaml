@@ -1,0 +1,136 @@
+<UserControl x:Class="HudManagerOverlay.ShipDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="260">
+    <UserControl.Resources>
+        <Style x:Key="StatLabel" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDim}"/>
+        </Style>
+        <Style x:Key="StatValue" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource Amber}"/>
+            <Setter Property="Margin" Value="0,10,0,4"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#1A2530" BorderBrush="{StaticResource Cyan}" BorderThickness="1,0,0,0" Padding="12,8">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="Root">
+                <TextBlock x:Name="NoSelectionText" Text="Select a ship to see details"
+                           Foreground="{StaticResource TextDim}" FontFamily="Consolas" FontSize="12"
+                           TextWrapping="Wrap"/>
+
+                <StackPanel x:Name="DetailPanel" Visibility="Collapsed">
+                    <TextBlock x:Name="ShipNameText" Style="{StaticResource StatValue}" FontSize="16" TextWrapping="Wrap"/>
+                    <TextBlock x:Name="ShipSubText" Style="{StaticResource StatLabel}" Margin="0,2,0,0"/>
+
+                    <TextBlock Text="SPEED" Style="{StaticResource SectionHeader}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="SCM" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="ScmText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="BOOST" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="BoostText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="NAV" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="NavText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="HULL" Style="{StaticResource SectionHeader}"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="HP" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="HpText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="MASS" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="MassText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="CARGO" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="CargoText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock Text="CREW" Style="{StaticResource SectionHeader}"/>
+                    <TextBlock x:Name="CrewText" Style="{StaticResource StatValue}"/>
+
+                    <TextBlock x:Name="ShieldHeader" Text="SHIELD" Style="{StaticResource SectionHeader}"/>
+                    <Grid x:Name="ShieldGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="HP" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="ShieldHpText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="REGEN" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="ShieldRegenText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="FACE" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="ShieldFaceText" Style="{StaticResource StatValue}" FontSize="11"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <TextBlock x:Name="WeaponryHeader" Text="WEAPONRY" Style="{StaticResource SectionHeader}"/>
+                    <Grid x:Name="WeaponryGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="DPS" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="DpsText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="ALPHA" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="AlphaText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="MissileGrid" Margin="0,6,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="MISSILE DMG" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="MissileDmgText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="COUNT" Style="{StaticResource StatLabel}"/>
+                            <TextBlock x:Name="MissileCountText" Style="{StaticResource StatValue}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Border>
+</UserControl>

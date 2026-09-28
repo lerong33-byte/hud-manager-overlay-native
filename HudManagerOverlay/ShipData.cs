@@ -10,6 +10,28 @@ namespace HudManagerOverlay;
 // Mirrors the fields the Ship Loadout Bay list actually shows. The site's ships.json has far
 // more (slots, weaponry, shield, etc.) — those get added as later panels need them. Unknown
 // fields are simply ignored by System.Text.Json, so this stays forward-compatible.
+public sealed class ShipCrew
+{
+    [JsonPropertyName("min")] public int Min { get; set; }
+    [JsonPropertyName("max")] public int Max { get; set; }
+}
+
+public sealed class ShipShield
+{
+    [JsonPropertyName("hp")] public double? Hp { get; set; }
+    [JsonPropertyName("regen")] public double? Regen { get; set; }
+    [JsonPropertyName("face")] public string? Face { get; set; }
+}
+
+public sealed class ShipWeaponry
+{
+    [JsonPropertyName("pilot_dps")] public double? PilotDps { get; set; }
+    [JsonPropertyName("pilot_alpha")] public double? PilotAlpha { get; set; }
+    [JsonPropertyName("pilot_sustained")] public double? PilotSustained { get; set; }
+    [JsonPropertyName("missile_dmg")] public double? MissileDmg { get; set; }
+    [JsonPropertyName("missile_count")] public double? MissileCount { get; set; }
+}
+
 public sealed class Ship
 {
     [JsonPropertyName("name")] public string Name { get; set; } = "";
@@ -18,6 +40,13 @@ public sealed class Ship
     [JsonPropertyName("size")] public string Size { get; set; } = "";
     [JsonPropertyName("scm")] public double? Scm { get; set; }
     [JsonPropertyName("boost")] public double? Boost { get; set; }
+    [JsonPropertyName("nav")] public double? Nav { get; set; }
+    [JsonPropertyName("hp")] public double? Hp { get; set; }
+    [JsonPropertyName("mass")] public double? Mass { get; set; }
+    [JsonPropertyName("cargo")] public double? Cargo { get; set; }
+    [JsonPropertyName("crew")] public ShipCrew? Crew { get; set; }
+    [JsonPropertyName("shield")] public ShipShield? Shield { get; set; }
+    [JsonPropertyName("weaponry")] public ShipWeaponry? Weaponry { get; set; }
 }
 
 internal static class ShipData

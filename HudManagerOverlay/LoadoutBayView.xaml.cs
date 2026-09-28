@@ -24,4 +24,9 @@ public partial class LoadoutBayView : UserControl
                 s.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase) ||
                 s.Manufacturer.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
     }
+
+    private void ShipList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ShipList.SelectedItem is Ship ship) Detail.ShowShip(ship);
+    }
 }

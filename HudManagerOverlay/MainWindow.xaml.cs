@@ -66,9 +66,17 @@ public partial class MainWindow : Window
 
         SetInteractive(false); // click-through by default — game gets every click until toggled
 
+        AppUpdater.CheckInBackground();
+
         _tray = new TrayIcon();
         _tray.ToolRailRequested += () => Dispatcher.Invoke(ToggleToolRail);
-        _tray.QuitRequested += () => Dispatcher.Invoke(Close);
+        _tray.QuitRequested += () => Dispatcher.Invoke(() =>
+        {
+            // Only the deliberate "Quit" path applies a pending update — never any other exit
+            // route, and never if nothing was actually downloaded (returns false, falls through
+            // to the normal close).
+            if (!AppUpdater.TryApplyPendingUpdateAndExit()) Close();
+        });
         _tray.LoadoutBayRequested += () => Dispatcher.Invoke(OpenLoadoutBay);
         _tray.MissionsRequested += () => Dispatcher.Invoke(OpenMissions);
         _tray.BlueprintsRequested += () => Dispatcher.Invoke(OpenBlueprints);

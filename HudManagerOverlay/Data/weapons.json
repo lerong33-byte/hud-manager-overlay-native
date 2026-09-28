@@ -1,0 +1,578 @@
+[
+  {
+    "name": "WEAK",
+    "size": 1
+  },
+  {
+    "name": "Longsword",
+    "size": 1
+  },
+  {
+    "name": "Ardor-1 Salvaged",
+    "size": 1
+  },
+  {
+    "name": "Attrition-1",
+    "size": 1
+  },
+  {
+    "name": "Bulldog",
+    "size": 1
+  },
+  {
+    "name": "Deadbolt-1",
+    "size": 1
+  },
+  {
+    "name": "Dominance-1",
+    "size": 1
+  },
+  {
+    "name": "DR-XJ1",
+    "size": 1
+  },
+  {
+    "name": "FL-11",
+    "size": 1
+  },
+  {
+    "name": "Havoc",
+    "size": 1
+  },
+  {
+    "name": "Jericho",
+    "size": 1
+  },
+  {
+    "name": "Liberator",
+    "size": 1
+  },
+  {
+    "name": "LGHTSTRK-1",
+    "size": 1
+  },
+  {
+    "name": "M2C \"Swarm\"",
+    "size": 1
+  },
+  {
+    "name": "M3A",
+    "size": 1
+  },
+  {
+    "name": "MRX \"Torrent\"",
+    "size": 1
+  },
+  {
+    "name": "NDB-26",
+    "size": 1
+  },
+  {
+    "name": "NN-13",
+    "size": 1
+  },
+  {
+    "name": "Omnisky-3",
+    "size": 1
+  },
+  {
+    "name": "Singe (S1)",
+    "size": 1
+  },
+  {
+    "name": "Sledge I",
+    "size": 1
+  },
+  {
+    "name": "SCKRPNCH",
+    "size": 1
+  },
+  {
+    "name": "Buzzsaw",
+    "size": 1
+  },
+  {
+    "name": "Tarantula-1",
+    "size": 1
+  },
+  {
+    "name": "Yebira I",
+    "size": 1
+  },
+  {
+    "name": "YLLWJCKT",
+    "size": 1
+  },
+  {
+    "name": "WASP",
+    "size": 2
+  },
+  {
+    "name": "WHIP' Cannon",
+    "size": 2
+  },
+  {
+    "name": "Greatsword",
+    "size": 2
+  },
+  {
+    "name": "Ardor-2 Salvaged",
+    "size": 2
+  },
+  {
+    "name": "Attrition-2",
+    "size": 2
+  },
+  {
+    "name": "ATVS",
+    "size": 2
+  },
+  {
+    "name": "BRVS",
+    "size": 2
+  },
+  {
+    "name": "Badger",
+    "size": 2
+  },
+  {
+    "name": "CVSA",
+    "size": 2
+  },
+  {
+    "name": "Deadbolt-2",
+    "size": 2
+  },
+  {
+    "name": "Dominance-2",
+    "size": 2
+  },
+  {
+    "name": "DR-XJ2",
+    "size": 2
+  },
+  {
+    "name": "EVSD",
+    "size": 2
+  },
+  {
+    "name": "FL-22",
+    "size": 2
+  },
+  {
+    "name": "GVSR",
+    "size": 2
+  },
+  {
+    "name": "Hellion",
+    "size": 2
+  },
+  {
+    "name": "Jericho X",
+    "size": 2
+  },
+  {
+    "name": "Liberator Prime",
+    "size": 2
+  },
+  {
+    "name": "LGHTSTRK-2",
+    "size": 2
+  },
+  {
+    "name": "M4A",
+    "size": 2
+  },
+  {
+    "name": "MVSA",
+    "size": 2
+  },
+  {
+    "name": "NDB-28",
+    "size": 2
+  },
+  {
+    "name": "NN-14",
+    "size": 2
+  },
+  {
+    "name": "Omnisky-6",
+    "size": 2
+  },
+  {
+    "name": "Scorpion",
+    "size": 2
+  },
+  {
+    "name": "Singe (S2)",
+    "size": 2
+  },
+  {
+    "name": "Sledge II",
+    "size": 2
+  },
+  {
+    "name": "Strife",
+    "size": 2
+  },
+  {
+    "name": "SCKRPNCH-L",
+    "size": 2
+  },
+  {
+    "name": "Sawbuck",
+    "size": 2
+  },
+  {
+    "name": "Tarantula-2",
+    "size": 2
+  },
+  {
+    "name": "Thlilye",
+    "size": 2
+  },
+  {
+    "name": "Tigerstrike",
+    "size": 2
+  },
+  {
+    "name": "Yebira II",
+    "size": 2
+  },
+  {
+    "name": "WARLORD' Cannon",
+    "size": 3
+  },
+  {
+    "name": "Broadsword",
+    "size": 3
+  },
+  {
+    "name": "Ardor-3 Salvaged",
+    "size": 3
+  },
+  {
+    "name": "Attrition-3",
+    "size": 3
+  },
+  {
+    "name": "Panther",
+    "size": 3
+  },
+  {
+    "name": "Deadbolt-3",
+    "size": 3
+  },
+  {
+    "name": "Dominance-3",
+    "size": 3
+  },
+  {
+    "name": "DR-XJ3",
+    "size": 3
+  },
+  {
+    "name": "FL-33",
+    "size": 3
+  },
+  {
+    "name": "Jericho XL",
+    "size": 3
+  },
+  {
+    "name": "Jericho XL",
+    "size": 3
+  },
+  {
+    "name": "Liberator Ultra",
+    "size": 3
+  },
+  {
+    "name": "LGHTSTRK-3",
+    "size": 3
+  },
+  {
+    "name": "M5A",
+    "size": 3
+  },
+  {
+    "name": "Mantis",
+    "size": 3
+  },
+  {
+    "name": "NDB-30",
+    "size": 3
+  },
+  {
+    "name": "NN-15",
+    "size": 3
+  },
+  {
+    "name": "Omnisky-9",
+    "size": 3
+  },
+  {
+    "name": "Predator",
+    "size": 3
+  },
+  {
+    "name": "PyroBurst",
+    "size": 3
+  },
+  {
+    "name": "Quarreler",
+    "size": 3
+  },
+  {
+    "name": "Reign-3",
+    "size": 3
+  },
+  {
+    "name": "Singe (S3)",
+    "size": 3
+  },
+  {
+    "name": "Sledge III",
+    "size": 3
+  },
+  {
+    "name": "SCKRPNCH-XL",
+    "size": 3
+  },
+  {
+    "name": "Shredder",
+    "size": 3
+  },
+  {
+    "name": "Tarantula-3",
+    "size": 3
+  },
+  {
+    "name": "Tormenter",
+    "size": 3
+  },
+  {
+    "name": "Yeng\u2019tu",
+    "size": 3
+  },
+  {
+    "name": "AD4B",
+    "size": 4
+  },
+  {
+    "name": "Attrition-4",
+    "size": 4
+  },
+  {
+    "name": "Axiom",
+    "size": 4
+  },
+  {
+    "name": "Breakneck",
+    "size": 4
+  },
+  {
+    "name": "C-788",
+    "size": 4
+  },
+  {
+    "name": "Rhino",
+    "size": 4
+  },
+  {
+    "name": "Deadbolt-4",
+    "size": 4
+  },
+  {
+    "name": "LGHTSTRK-4",
+    "size": 4
+  },
+  {
+    "name": "M6A",
+    "size": 4
+  },
+  {
+    "name": "Omnisky-12",
+    "size": 4
+  },
+  {
+    "name": "Relentless",
+    "size": 4
+  },
+  {
+    "name": "Revenant",
+    "size": 4
+  },
+  {
+    "name": "Salvation",
+    "size": 4
+  },
+  {
+    "name": "TMSB-5 Gatling",
+    "size": 4
+  },
+  {
+    "name": "WAR",
+    "size": 5
+  },
+  {
+    "name": "WRATH",
+    "size": 5
+  },
+  {
+    "name": "WRATH",
+    "size": 5
+  },
+  {
+    "name": "Absolution",
+    "size": 5
+  },
+  {
+    "name": "AD5B",
+    "size": 5
+  },
+  {
+    "name": "Attrition-5",
+    "size": 5
+  },
+  {
+    "name": "Galdereen",
+    "size": 5
+  },
+  {
+    "name": "Deadbolt-5",
+    "size": 5
+  },
+  {
+    "name": "Echion",
+    "size": 5
+  },
+  {
+    "name": "Leonids Cannon",
+    "size": 5
+  },
+  {
+    "name": "LGHTSTRK-5",
+    "size": 5
+  },
+  {
+    "name": "M7A",
+    "size": 5
+  },
+  {
+    "name": "NV57",
+    "size": 5
+  },
+  {
+    "name": "Omnisky-15",
+    "size": 5
+  },
+  {
+    "name": "Slayer",
+    "size": 5
+  },
+  {
+    "name": "AD6B",
+    "size": 6
+  },
+  {
+    "name": "Attrition-6",
+    "size": 6
+  },
+  {
+    "name": "Mammoth",
+    "size": 6
+  },
+  {
+    "name": "CNDMNTN",
+    "size": 6
+  },
+  {
+    "name": "Deadbolt-6",
+    "size": 6
+  },
+  {
+    "name": "Draugar",
+    "size": 6
+  },
+  {
+    "name": "LGHTSTRK-6",
+    "size": 6
+  },
+  {
+    "name": "M8A",
+    "size": 6
+  },
+  {
+    "name": "Maris Cannon",
+    "size": 6
+  },
+  {
+    "name": "Omnisky-18",
+    "size": 6
+  },
+  {
+    "name": "C-07T",
+    "size": 7
+  },
+  {
+    "name": "Conqueror-7",
+    "size": 7
+  },
+  {
+    "name": "M9A",
+    "size": 7
+  },
+  {
+    "name": "SF7B",
+    "size": 7
+  },
+  {
+    "name": "SF7E",
+    "size": 7
+  },
+  {
+    "name": "M10A",
+    "size": 8
+  },
+  {
+    "name": "RSI Medusa Cannon",
+    "size": 8
+  },
+  {
+    "name": "M11A",
+    "size": 9
+  },
+  {
+    "name": "Destroyer",
+    "size": 10
+  },
+  {
+    "name": "Exodus-10",
+    "size": 10
+  },
+  {
+    "name": "Supremacy-10T",
+    "size": 10
+  },
+  {
+    "name": "Bulldog HZ",
+    "size": 1
+  },
+  {
+    "name": "Badger HZ",
+    "size": 2
+  },
+  {
+    "name": "Panther HZ",
+    "size": 3
+  },
+  {
+    "name": "Snapper",
+    "size": 2
+  },
+  {
+    "name": "Deathroll",
+    "size": 2
+  }
+]

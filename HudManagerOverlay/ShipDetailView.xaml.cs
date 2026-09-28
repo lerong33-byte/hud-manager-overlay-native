@@ -1,12 +1,24 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
 namespace HudManagerOverlay;
 
-// Flattened display shapes for the XAML ItemsControls — keeps binding paths simple without
-// putting presentation logic (gimbal/fixed label, "2x Ignite II") on the data model itself.
-public sealed record WeaponSlotDisplay(string Label, int Size, string MountKind, string DefaultName);
+// Flattened display shapes for the XAML ItemsControls — keeps presentation logic (gimbal/fixed
+// label, "2x Ignite II", the swap dropdown's options) off the data model itself.
+// Class, not record: SelectedName needs to be mutable for the ComboBox's two-way binding, and
+// this is display-only state — it doesn't feed back into ShipData or any save file (that needs
+// an actual game-facing loadout system, out of scope for this pass; see the project's known-gaps
+// notes on the full loadout editor).
+public sealed class WeaponSlotDisplay
+{
+    public string Label { get; init; } = "";
+    public int Size { get; init; }
+    public string MountKind { get; init; } = "";
+    public List<string> Options { get; init; } = new();
+    public string SelectedName { get; set; } = "";
+}
 public sealed record MissileSlotDisplay(string Label, string Summary);
 
 public partial class ShipDetailView : UserControl
@@ -59,8 +71,18 @@ public partial class ShipDetailView : UserControl
             MissileCountText.Text = Fmt(ship.Weaponry.MissileCount);
         }
 
-        var guns = ship.Slots.Where(s => s.Kind == "gun").Select(s => new WeaponSlotDisplay(
-            s.Label, s.Size, s.Fixed ? " Fixed" : s.Gimbal ? " Gimbal" : "", s.DefaultName ?? "Empty")).ToList();
+        var guns = ship.Slots.Where(s => s.Kind == "gun").Select(s =>
+        {
+            var options = WeaponCatalog.NamesForSize(s.Size);
+            var current = s.DefaultName ?? "Empty";
+            if (!options.Contains(current)) options.Insert(0, current); // keep the ship's stock weapon selectable even if it's not in the trimmed catalog
+            return new WeaponSlotDisplay
+            {
+                Label = s.Label, Size = s.Size,
+                MountKind = s.Fixed ? " Fixed" : s.Gimbal ? " Gimbal" : "",
+                Options = options, SelectedName = current,
+            };
+        }).ToList();
         WeaponSlotList.ItemsSource = guns;
         LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
 

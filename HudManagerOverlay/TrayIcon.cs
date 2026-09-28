@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace HudManagerOverlay;
@@ -28,9 +29,10 @@ internal sealed class TrayIcon : IDisposable
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(quitItem);
 
+        var iconPath = Path.Combine(AppContext.BaseDirectory, "app.ico");
         _icon = new NotifyIcon
         {
-            Icon = SystemIcons.Application, // placeholder — swap for the real brand icon later
+            Icon = File.Exists(iconPath) ? new Icon(iconPath) : SystemIcons.Application,
             Text = "H.U.D Manager Overlay",
             Visible = true,
             ContextMenuStrip = menu,

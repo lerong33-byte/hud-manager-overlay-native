@@ -97,6 +97,8 @@ public partial class MissionsView : UserControl
     {
         MissionList.ItemsSource = null;
         MissionList.ItemsSource = items;
+        Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+        NativeInterop.ForceRedraw(this);
     }
 
     private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -132,6 +134,8 @@ public partial class MissionsView : UserControl
         EnemyText.Text = FormatEnemies(m);
         SystemsDetailText.Text = m.StarSystems.Count > 0 ? string.Join(", ", m.StarSystems) : "—";
         IllegalBadge.Visibility = m.Illegal ? Visibility.Visible : Visibility.Collapsed;
+        Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+        NativeInterop.ForceRedraw(this);
     }
 
     private static MissionDisplay ToDisplay(Mission m) => new()

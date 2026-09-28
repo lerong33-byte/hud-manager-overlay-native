@@ -1,5 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace HudManagerOverlay;
 
@@ -29,6 +31,32 @@ internal static class NativeInterop
     private const uint SWP_NOZORDER = 0x0004;
     private const uint SWP_NOACTIVATE = 0x0010;
     private const uint SWP_FRAMECHANGED = 0x0020;
+
+    [DllImport("user32.dll")]
+    private static extern bool RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, uint flags);
+
+    private const uint RDW_INVALIDATE = 0x0001;
+    private const uint RDW_UPDATENOW = 0x0100;
+    private const uint RDW_ALLCHILDREN = 0x0080;
+    private const uint RDW_ERASE = 0x0004;
+
+    // Belt-and-suspenders for the "click worked, content changed, screen didn't" bug: forces
+    // Windows to actually repaint this layered window and everything in it right now, instead of
+    // waiting for WPF's own composition to get around to it. Cheap enough to call after every
+    // selection change — this is a handful of panels, not a game scene.
+    public static void ForceRedraw(IntPtr hwnd) =>
+        RedrawWindow(hwnd, IntPtr.Zero, IntPtr.Zero, RDW_INVALIDATE | RDW_UPDATENOW | RDW_ALLCHILDREN | RDW_ERASE);
+
+    // Convenience overload for panel code: finds the hosting PanelHost window from any element in
+    // its visual tree and force-redraws it. Call this as the last line of any "show this content"
+    // method (ShowMission, ShowBlueprint, ShowShip, ...).
+    public static void ForceRedraw(UIElement element)
+    {
+        var window = Window.GetWindow(element);
+        if (window == null) return;
+        var hwnd = new WindowInteropHelper(window).Handle;
+        if (hwnd != IntPtr.Zero) ForceRedraw(hwnd);
+    }
 
     [DllImport("user32.dll")]
     public static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);

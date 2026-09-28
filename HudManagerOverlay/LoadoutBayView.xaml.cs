@@ -24,6 +24,7 @@ public partial class LoadoutBayView : UserControl
             : _allShips.Where(s =>
                 s.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase) ||
                 s.Manufacturer.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
+        NativeInterop.ForceRedraw(this);
     }
 
     private void ShipList_SelectionChanged(object sender, SelectionChangedEventArgs e)

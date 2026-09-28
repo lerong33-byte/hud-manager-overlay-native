@@ -57,6 +57,7 @@ public partial class BlueprintsView : UserControl
         BlueprintList.ItemsSource = q.Length == 0
             ? _all
             : _all.Where(b => b.Name.Contains(q, System.StringComparison.OrdinalIgnoreCase)).ToList();
+        NativeInterop.ForceRedraw(this);
     }
 
     private void BlueprintList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -103,6 +104,8 @@ public partial class BlueprintsView : UserControl
         SourceList.ItemsSource = null;
         SourceList.ItemsSource = sources;
         SourcesHeader.Text = sources.Count > 0 ? "UNLOCK SOURCES" : "UNLOCK SOURCES — none known";
+        Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+        NativeInterop.ForceRedraw(this);
     }
 
     private static BlueprintDisplay ToDisplay(Blueprint b) => new()

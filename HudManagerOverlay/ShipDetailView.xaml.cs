@@ -161,6 +161,16 @@ public partial class ShipDetailView : UserControl
         ReadOnlyPartList.ItemsSource = null;
         ReadOnlyPartList.ItemsSource = readOnlyParts;
         ReadOnlyPartHeader.Visibility = readOnlyParts.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        // Setting properties above only QUEUES layout/render work at Render priority — it doesn't
+        // happen synchronously. That queued work should normally flush within one frame once this
+        // method returns to the message loop, but empirically it sometimes didn't (confirmed with
+        // a blocking MessageBox right here: the content was already correctly laid out underneath
+        // it, proving the delay is in *painting*, not in this method's logic). Explicitly pumping
+        // the dispatcher up to Render priority forces that flush synchronously instead of hoping
+        // it happens before the user looks. Bug reported 2026-09-28.
+        Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
+        NativeInterop.ForceRedraw(this);
     }
 
     private static List<ReadOnlyPartDisplay> BuildReadOnlyGroup(string displayName, List<ComponentPart> parts)

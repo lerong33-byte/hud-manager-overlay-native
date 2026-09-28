@@ -20,7 +20,7 @@ public sealed class Mission
     [JsonPropertyName("enemy_count_max")] public int? EnemyCountMax { get; set; }
     [JsonPropertyName("reward_min")] public int? RewardMin { get; set; }
     [JsonPropertyName("reward_max")] public int? RewardMax { get; set; }
-    [JsonPropertyName("time_to_complete_minutes")] public int? TimeToCompleteMinutes { get; set; }
+    [JsonPropertyName("time_to_complete_minutes")] public double? TimeToCompleteMinutes { get; set; }
     [JsonPropertyName("star_systems")] public List<string> StarSystems { get; set; } = new();
     [JsonPropertyName("rank_index")] public int? RankIndex { get; set; }
     [JsonPropertyName("game_version")] public string? GameVersion { get; set; }

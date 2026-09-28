@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -115,7 +116,7 @@ public partial class MissionsView : UserControl
         TitleText.Text = m.Title ?? "Unknown";
         GiverText.Text = m.MissionGiver ?? "Unknown giver";
         RewardDetailText.Text = FormatReward(m);
-        TimeText.Text = m.TimeToCompleteMinutes is int mins ? $"{mins} min" : "—";
+        TimeText.Text = m.TimeToCompleteMinutes is double mins ? $"{Math.Round(mins)} min" : "—";
         EnemyText.Text = FormatEnemies(m);
         SystemsDetailText.Text = m.StarSystems.Count > 0 ? string.Join(", ", m.StarSystems) : "—";
         IllegalBadge.Visibility = m.Illegal ? Visibility.Visible : Visibility.Collapsed;

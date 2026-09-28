@@ -31,11 +31,13 @@ Updated as work happens — check here any time for current state without needin
 ## Missions (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data model + loader | 🔧 | Loads 1427 missions, app stays up (smoke-tested) |
-| Category + mission list UI | 🔧 | Built, not live-clicked |
-| Detail pane | 🔧 | Built, not live-clicked |
-| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Data model + loader | ✅ | Fixed 2026-09-28: crashed on open (`time_to_complete_minutes` is a float for 150/1427 missions, model had it as `int?`) — now `double?`, rounded for display |
+| Category + mission list UI | ✅ | Live-verified 2026-09-28 — categories + counts + mission list render |
+| Detail pane | ✅ | Live-verified 2026-09-28 — title/giver/reward/time/enemies/systems all populate on click |
+| Wired into tool rail + tray | ✅ | Live-verified 2026-09-28 |
 | AI mission-explain / video walkthroughs / briefings | ⬜ | Deliberately deferred — network/API-dependent, v1 is pure static-data browse |
+
+⚠️ Data quality (not a crash, cosmetic): some mission titles are unresolved game templates, e.g. `[Contractor|BountyTitleSuper]`, `Green light on [TargetName|Last]` — raw source data, not a app bug. Low priority cleanup: could regex-strip or reword these.
 
 ## Blueprints (panel)
 | Module | Status | Notes |

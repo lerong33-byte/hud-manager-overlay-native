@@ -52,6 +52,13 @@ Updated as work happens — check here any time for current state without needin
 | List UI (search + DPS sort) | 🔧 | Built, not live-clicked |
 | Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 
+## Materials (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Data extraction (26 materials, tier/RS/mineable) | 🔧 | |
+| List UI (search + RS sort) | 🔧 | Built, not live-clicked |
+| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+
 ## Not started
 - Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
 - Head tracking, voice, license/premium gating

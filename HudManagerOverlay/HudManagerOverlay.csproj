@@ -4,7 +4,7 @@
     <!-- Bump this for every real build the CI workflow (.github/workflows/build-release.yml)
          publishes — it drives the release tag (vX.Y.Z) and the exe's own file version. Still
          pre-release: this native rebuild hasn't shipped to a real user yet. -->
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>

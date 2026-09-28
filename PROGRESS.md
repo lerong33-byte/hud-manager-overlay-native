@@ -19,7 +19,7 @@ Updated as work happens — check here any time for current state without needin
 ## Ship Loadout Bay (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Ship list + search | 🔧 | User confirmed working once (2026-09-28, pre-fix build); my own automated click testing on this specific list failed 4/4 attempts post-fix (Missions/Blueprints passed the same test reliably) — unclear if that's a real regression or a synthetic-input quirk. **Needs one real-hands retest.** |
+| Ship list + search | ✅ | Selection + detail pane both confirmed firing correctly (verified 2026-09-28 with a blocking diagnostic dialog) — the earlier "doesn't work" reports were the detail pane taking noticeably longer to render than Missions/Blueprints (blank under ~1s, populated after a few seconds), not a real failure. All catalog lookups it uses are cached, so the lag is in WPF layout of the ComboBox-heavy rows, not I/O. |
 | Stats display (speed/hull/shield/weaponry) | ✅ | |
 | Weapon mounts — swap + save | ✅ | |
 | Turret/manned-turret weapon rows | 🔧 | Algorithm validated against all 126 turret ships in ships.json (0 null-size risks) + exact row/label output confirmed for Idris-M (55 rows); still no live UI click |
@@ -29,6 +29,8 @@ Updated as work happens — check here any time for current state without needin
 | Radar / life support — read-only display | 🔧 | Just built, not live-clicked |
 
 ⚠️ 2026-09-28: found and fixed two app-wide bugs that were breaking selection on every panel, not just this one (see the writeup right below this table). If ships stop responding again, it's worth re-checking those before assuming a new bug.
+
+🐢 Perf TODO: ship detail pane render lag (see Ship list row above) — worth profiling `ShipDetailView.ShowShip` if it keeps feeling slow, likely the ComboBox-per-slot rows rather than data loading (all catalogs are cached).
 
 ## Missions (panel)
 | Module | Status | Notes |

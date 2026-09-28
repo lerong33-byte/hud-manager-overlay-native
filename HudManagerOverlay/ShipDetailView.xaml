@@ -38,6 +38,14 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <!-- Plain Style Setters on Background/Foreground couldn't fix the closed box: the default
+             ComboBox ControlTemplate has its own internal trigger for "selected item shown in the
+             closed box while the control isn't focused" that hardcodes a muted system color for
+             that template part directly — a Style.Setter on the DP can't win against a trigger
+             baked into the template itself. Only a full custom template removes that interference.
+             Confirmed this was the actual cause 2026-09-28: unfocused weapon combos on multi-mount
+             ships (only one combo can hold focus at a time) showed washed-out text; missile/
+             component combos happened to not exhibit it as visibly but were equally at risk. -->
         <Style x:Key="DarkCombo" TargetType="ComboBox">
             <Setter Property="Background" Value="#1A2530"/>
             <Setter Property="Foreground" Value="White"/>
@@ -47,6 +55,54 @@
             <Setter Property="BorderBrush" Value="{StaticResource TextDim}"/>
             <Setter Property="Margin" Value="0,2,0,0"/>
             <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboItem}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="Toggle" Focusable="False" ClickMode="Press"
+                                          IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="1" CornerRadius="2">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="18"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Path Grid.Column="1" Data="M0,0 L4,4 L8,0 Z" Fill="{StaticResource TextDim}"
+                                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+                            <!-- Always renders SelectionBoxItem in the ComboBox's own plain
+                                 Background/Foreground — no selected/focused template trigger to
+                                 fight with. -->
+                            <ContentPresenter IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              Margin="6,3,20,3"
+                                              VerticalAlignment="Center" HorizontalAlignment="Left"
+                                              TextElement.Foreground="{TemplateBinding Foreground}"
+                                              TextElement.FontFamily="{TemplateBinding FontFamily}"
+                                              TextElement.FontSize="{TemplateBinding FontSize}"
+                                              TextElement.FontWeight="{TemplateBinding FontWeight}"/>
+                            <Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+                                <Border Background="#1A2530" BorderBrush="{StaticResource Cyan}" BorderThickness="1"
+                                        MinWidth="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}"
+                                        MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <ScrollViewer SnapsToDevicePixels="True">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
 

@@ -187,7 +187,10 @@ public partial class ShipDetailView : UserControl
             var name = parts[i].Name;
             if (string.IsNullOrEmpty(name)) continue; // unused placeholder slot
             var label = parts.Count > 1 ? $"{displayName} {i + 1}" : displayName;
-            result.Add(new ReadOnlyPartDisplay { Label = label, PartName = name });
+            // A few ships (e.g. Idris) carry a raw internal class id like "radr_gnrp_s03_idris_temp"
+            // instead of a marketing name — show a readable stand-in rather than the id.
+            var shown = name.Contains('_') && name == name.ToLowerInvariant() ? $"Stock {displayName}" : name;
+            result.Add(new ReadOnlyPartDisplay { Label = label, PartName = shown });
         }
         return result;
     }

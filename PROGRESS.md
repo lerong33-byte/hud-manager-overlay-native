@@ -28,7 +28,7 @@ Updated as work happens — check here any time for current state without needin
 | Components: flight controller — swap + save | 🔧 | Just built, not live-clicked |
 | Radar / life support — read-only display | 🔧 | Just built, not live-clicked |
 
-⚠️ 2026-09-28: found and fixed two app-wide bugs that were breaking selection on every panel, not just this one (see the writeup right below this table). If ships stop responding again, it's worth re-checking those before assuming a new bug.
+✅ 2026-09-28: found and fixed the real cause of "works once then breaks" across every panel — `PanelHost` used to Hide() itself when the last panel closed and Show() itself again on next open; that hide/show cycle on the layered click-through window was corrupting state (caught a visible corrupted-paint artifact as proof). Fixed by never hiding the window at all — shown once at startup, stays shown, an empty canvas already looks/behaves identical to hidden. User-confirmed working across repeated open/close cycles on Ship Loadout Bay and Missions. (Several earlier fixes this same day — click-through timing, ItemsSource refresh, Dispatcher render-flush — were all real but were treating symptoms of this one root cause, not the cause itself.)
 
 🐢 Perf TODO: ship detail pane render lag (see Ship list row above) — worth profiling `ShipDetailView.ShowShip` if it keeps feeling slow, likely the ComboBox-per-slot rows rather than data loading (all catalogs are cached).
 

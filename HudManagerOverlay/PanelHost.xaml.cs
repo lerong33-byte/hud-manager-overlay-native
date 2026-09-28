@@ -59,6 +59,9 @@ public partial class PanelHost : Window
             Left = 0; Top = 0; Width = dipW; Height = dipH;
         };
 
+        // Shown once, immediately, and never hidden again — see the note on RemoveElement for why.
+        Show();
+
         _pollFallback.Tick += (_, _) => CheckCursor();
         _pollFallback.Start();
         _mouseHook.Move += CheckCursor;
@@ -70,23 +73,15 @@ public partial class PanelHost : Window
     public PanelChrome AddPanel(string title, UIElement content, double x, double y, double w, double h)
     {
         var chrome = new PanelChrome { Title = title, PanelContent = content, Width = w, Height = h };
-        chrome.CloseRequested += () => PanelCanvas.Children.Remove(chrome);
+        chrome.CloseRequested += () => RemoveElement(chrome);
         Canvas.SetLeft(chrome, x);
         Canvas.SetTop(chrome, y);
         PanelCanvas.Children.Add(chrome);
-        ReshowIfHidden();
         return chrome;
     }
 
-    // Closing the last panel drops PanelCanvas.Children to 0, which hides this window (below) —
-    // but _interactive was never reset, so it can still say "true" from the last panel that was
-    // open. Reopening a panel then starts out of sync with the window's real click-through state
-    // until the next flip, i.e. it can silently not respond to clicks the moment it reappears.
-    // Bug reported 2026-09-28: Missions worked, then broke after just closing and reopening it.
-    private void ReshowIfHidden()
+    private void ResetInteractiveState()
     {
-        if (IsVisible) return;
-        Show();
         _interactive = false;
         _ignoreStreak = 0;
         var hwnd = new WindowInteropHelper(this).Handle;
@@ -100,14 +95,24 @@ public partial class PanelHost : Window
         Canvas.SetLeft(element, x);
         Canvas.SetTop(element, y);
         PanelCanvas.Children.Add(element);
-        ReshowIfHidden();
     }
 
-    public void RemoveElement(UIElement element) => PanelCanvas.Children.Remove(element);
+    // Used to Hide() this window whenever the last panel closed, then Show() it again on the next
+    // AddPanel/AddFixed. That hide/show cycle on a layered (WS_EX_LAYERED) window turned out to be
+    // the real bug: confirmed 2026-09-28 with a visible corrupted-paint artifact (a stray solid
+    // color block) appearing after a close+reopen, on top of interactive state going stale. Never
+    // hiding the window at all sidesteps the whole class of problem — an empty Canvas already
+    // paints nothing and (once reset below) is fully click-through, which looks and behaves
+    // identically to a hidden window for anything the user can see or click.
+    public void RemoveElement(UIElement element)
+    {
+        PanelCanvas.Children.Remove(element);
+        if (PanelCanvas.Children.Count == 0) ResetInteractiveState();
+    }
 
     private void CheckCursor()
     {
-        if (PanelCanvas.Children.Count == 0) { Hide(); return; }
+        if (PanelCanvas.Children.Count == 0) return;
 
         // NOT System.Windows.Forms.Cursor.Position — confirmed live in a hybrid WPF+WinForms app
         // (this one, for the tray icon) that it reports coordinates scaled ~1.25x relative to

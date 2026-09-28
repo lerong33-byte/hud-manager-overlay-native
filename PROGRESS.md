@@ -31,10 +31,10 @@ Updated as work happens — check here any time for current state without needin
 ## Missions (panel)
 | Module | Status | Notes |
 |---|---|---|
-| Data model + loader | 🔧 | Just built |
-| Category + mission list UI | 🚧 | In progress |
-| Detail pane | 🚧 | In progress |
-| Wired into tool rail | ⬜ | |
+| Data model + loader | 🔧 | Loads 1427 missions, app stays up (smoke-tested) |
+| Category + mission list UI | 🔧 | Built, not live-clicked |
+| Detail pane | 🔧 | Built, not live-clicked |
+| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 | AI mission-explain / video walkthroughs / briefings | ⬜ | Deliberately deferred — network/API-dependent, v1 is pure static-data browse |
 
 ## Not started

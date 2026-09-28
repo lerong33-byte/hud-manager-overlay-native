@@ -71,6 +71,7 @@ public partial class MainWindow : Window
         _tray.QuitRequested += () => Dispatcher.Invoke(Close);
         _tray.LoadoutBayRequested += () => Dispatcher.Invoke(OpenLoadoutBay);
         _tray.MissionsRequested += () => Dispatcher.Invoke(OpenMissions);
+        _tray.BlueprintsRequested += () => Dispatcher.Invoke(OpenBlueprints);
 
         _keyHook = new KeyboardHook();
         _keyHook.KeyDown += OnGlobalKeyDown;
@@ -201,6 +202,7 @@ public partial class MainWindow : Window
         _toolRail = new ToolRailView();
         _toolRail.AddTool("SHIP LOADOUT BAY", OpenLoadoutBay);
         _toolRail.AddTool("MISSIONS", OpenMissions);
+        _toolRail.AddTool("BLUEPRINTS", OpenBlueprints);
         _toolRail.CloseRequested += () =>
         {
             if (_toolRail == null) return;
@@ -236,6 +238,22 @@ public partial class MainWindow : Window
             : (200, 150, 680, 480);
         var chrome = _panelHost.AddPanel("MISSIONS", new MissionsView(), x, y, w, h);
         chrome.CloseRequested += () => _settings.Panels["missions"] = new PanelState
+        {
+            X = System.Windows.Controls.Canvas.GetLeft(chrome),
+            Y = System.Windows.Controls.Canvas.GetTop(chrome),
+            W = chrome.ActualWidth, H = chrome.ActualHeight,
+        };
+    }
+
+    private void OpenBlueprints()
+    {
+        _panelHost ??= new PanelHost();
+        var saved = _settings.Panels.GetValueOrDefault("blueprints");
+        var (x, y, w, h) = saved != null
+            ? (saved.X, saved.Y, saved.W, saved.H)
+            : (200, 150, 620, 480);
+        var chrome = _panelHost.AddPanel("BLUEPRINTS", new BlueprintsView(), x, y, w, h);
+        chrome.CloseRequested += () => _settings.Panels["blueprints"] = new PanelState
         {
             X = System.Windows.Controls.Canvas.GetLeft(chrome),
             Y = System.Windows.Controls.Canvas.GetTop(chrome),

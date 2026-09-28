@@ -172,7 +172,8 @@
                                             <Run Text="{Binding MountKind}"/>
                                         </TextBlock>
                                         <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedName, Mode=TwoWay}"
-                                                  SelectionChanged="WeaponCombo_SelectionChanged" Style="{StaticResource DarkCombo}"/>
+                                                  SelectionChanged="WeaponCombo_SelectionChanged" Style="{StaticResource DarkCombo}"
+                                                  IsEditable="False" Background="#1A2530" Foreground="White"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>

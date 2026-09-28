@@ -125,6 +125,12 @@ public partial class ShipDetailView : UserControl
         WeaponSlotList.ItemsSource = null;
         WeaponSlotList.ItemsSource = guns;
         LoadoutHeader.Visibility = guns.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+        // First ItemsControl populated in this method to use ComboBox rows — flushing here, not
+        // just once at the very end, in case whatever intermittently leaves early-created rows
+        // unpainted (2026-09-28: weapon dropdown rows sometimes render as default-white/unstyled
+        // while later-created missile/component rows in the same call are fine) is specific to
+        // being first rather than being a weapon row.
+        Dispatcher.Invoke(() => { }, System.Windows.Threading.DispatcherPriority.Render);
 
         var racks = ship.Missiles.Where(m => m.Count > 0).Select(m =>
         {

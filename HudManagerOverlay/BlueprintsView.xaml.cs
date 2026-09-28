@@ -20,14 +20,22 @@ public sealed class SourceDisplay
     public string ScopeAndChance { get; init; } = "";
 }
 
+public sealed class IngredientDisplay
+{
+    public string Name { get; init; } = "";
+    public string QtyText { get; init; } = "";
+}
+
 public partial class BlueprintsView : UserControl
 {
     private readonly List<BlueprintDisplay> _all;
+    private readonly Dictionary<string, Recipe> _recipes;
 
     public BlueprintsView()
     {
         InitializeComponent();
 
+        _recipes = RecipeData.Load();
         _all = BlueprintData.Load()
             .OrderBy(b => b.Name)
             .Select(ToDisplay)
@@ -64,7 +72,20 @@ public partial class BlueprintsView : UserControl
         NameText.Text = b.Name ?? "Unknown";
         DefaultBadge.Visibility = b.IsAvailableByDefault ? Visibility.Visible : Visibility.Collapsed;
         CraftTimeDetailText.Text = b.CraftTimeLabel ?? "—";
-        IngredientText.Text = b.IngredientCount is int c ? $"{c}" : "—";
+
+        // Recipe ingredients are a separate dataset (crafting-enriched.json) keyed by output_class,
+        // not part of blueprints.json itself — only some blueprints have a matching recipe entry.
+        var ingredients = b.OutputClass != null && _recipes.TryGetValue(b.OutputClass, out var recipe)
+            ? recipe.Ingredients.Select(i => new IngredientDisplay
+            {
+                Name = i.Name ?? "Unknown",
+                QtyText = i.Qty is double q ? $"{q:0.##}{(string.IsNullOrEmpty(i.Unit) ? "" : " " + i.Unit)}" : "",
+            }).ToList()
+            : new List<IngredientDisplay>();
+        IngredientList.ItemsSource = ingredients;
+        IngredientHeader.Text = ingredients.Count > 0
+            ? "INGREDIENTS"
+            : b.IngredientCount is int c ? $"INGREDIENTS — {c} (detail unavailable)" : "INGREDIENTS — unavailable";
 
         var sources = b.Sources.Select(s => new SourceDisplay
         {

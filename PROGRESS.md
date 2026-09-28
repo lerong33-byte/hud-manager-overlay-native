@@ -37,6 +37,14 @@ Updated as work happens — check here any time for current state without needin
 | Wired into tool rail + tray | 🔧 | Built, not live-clicked |
 | AI mission-explain / video walkthroughs / briefings | ⬜ | Deliberately deferred — network/API-dependent, v1 is pure static-data browse |
 
+## Blueprints (panel)
+| Module | Status | Notes |
+|---|---|---|
+| Data model + loader | 🔧 | Loads 1606 blueprints, app stays up (smoke-tested) |
+| List + search + detail (craft time, ingredients, sources) | 🔧 | Built, not live-clicked |
+| Wired into tool rail + tray | 🔧 | Built, not live-clicked |
+| Got-it tracking / mission cross-reference (old panel had this) | ⬜ | Deliberately deferred — v1 is browse-only |
+
 ## Not started
 - Every other Electron panel: media, Live Kit, admin/live Game.log, etc.
 - Head tracking, voice, license/premium gating

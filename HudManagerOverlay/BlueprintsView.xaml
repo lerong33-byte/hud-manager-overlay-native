@@ -74,8 +74,21 @@
                         <TextBlock Text="CRAFT TIME" Style="{StaticResource StatLabel}"/>
                         <TextBlock x:Name="CraftTimeDetailText" Style="{StaticResource StatValue}" Margin="0,0,0,8"/>
 
-                        <TextBlock Text="INGREDIENTS" Style="{StaticResource StatLabel}"/>
-                        <TextBlock x:Name="IngredientText" Style="{StaticResource StatValue}" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="IngredientHeader" Text="INGREDIENTS" Style="{StaticResource StatLabel}" Margin="0,0,0,4"/>
+                        <ItemsControl x:Name="IngredientList" Margin="0,0,0,8">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,0,0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding Name}" FontFamily="Consolas" FontSize="11" Foreground="White"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding QtyText}" FontFamily="Consolas" FontSize="11" Foreground="{StaticResource TextDim}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
                         <TextBlock x:Name="SourcesHeader" Text="UNLOCK SOURCES" Style="{StaticResource StatLabel}" Margin="0,4,0,4"/>
                         <ItemsControl x:Name="SourceList">

@@ -2,6 +2,7 @@
 using System.Data;
 using System.Threading;
 using System.Windows;
+using Velopack;
 
 namespace HudManagerOverlay;
 
@@ -11,6 +12,18 @@ namespace HudManagerOverlay;
 public partial class App : Application
 {
     private Mutex? _singleInstanceMutex;
+
+    public App()
+    {
+        // Must run before anything else in the process — including the single-instance mutex
+        // check below. The Velopack-built installer/updater relaunches this exe with special
+        // hidden args (e.g. after installing or updating) purely to run lifecycle hooks (create
+        // shortcuts, register the uninstaller, etc.) and then exit immediately; it must never
+        // reach the mutex check, the tray icon, or any real UI. VelopackApp.Run() detects those
+        // args, handles them, and exits on its own — for a normal launch it's a no-op and control
+        // falls through to OnStartup as usual.
+        VelopackApp.Build().Run();
+    }
 
     protected override void OnStartup(StartupEventArgs e)
     {

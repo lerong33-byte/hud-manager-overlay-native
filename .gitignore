@@ -3,4 +3,6 @@ obj/
 *.user
 .vs/
 HudManagerOverlay/publish_test/
+HudManagerOverlay/publish_release/
+HudManagerOverlay/Releases/
 ci_verify/

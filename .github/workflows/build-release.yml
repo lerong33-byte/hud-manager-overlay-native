@@ -1,0 +1,82 @@
+name: Build native overlay (self-contained, unsigned)
+
+# Builds a self-contained single-file HudManagerOverlay.exe (no .NET runtime required on the
+# user's machine) and publishes it as a draft GitHub release on THIS repo, tagged vX.Y.Z from
+# HudManagerOverlay.csproj's <Version>.
+#
+# NOT YET DONE (see PROGRESS.md "Not started" for the full list):
+#   - Code signing. The exe is unsigned — Windows SmartScreen will warn on first run. The
+#     Electron overlay (hud-manager-overlay-src) signs via Azure Trusted Signing; wiring the same
+#     service up for this repo needs the AZURE_TENANT_ID / AZURE_CLIENT_ID / AZURE_CLIENT_SECRET
+#     secrets added here (they're scoped per-repo, not shared automatically).
+#   - A real installer (MSI/Inno Setup/Squirrel/Velopack) — this ships the raw .exe as a zip,
+#     not something that installs itself, adds a Start Menu entry, or auto-updates.
+#   - Auto-update client logic — the exe has no built-in "check for updates" behavior yet.
+#
+# Defaults to a DRAFT release so a human verifies before anyone downloads it.
+
+on:
+  workflow_dispatch:
+    inputs:
+      draft:
+        description: "Publish as a DRAFT release (true = test, not public)"
+        required: false
+        default: "true"
+
+permissions:
+  contents: write
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Resolve version + tag
+        id: ver
+        shell: pwsh
+        run: |
+          $xml = [xml](Get-Content HudManagerOverlay/HudManagerOverlay.csproj)
+          $version = $xml.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1
+          "pkg=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          Write-Output "Building $version"
+
+      - name: Publish self-contained single-file build
+        shell: pwsh
+        run: |
+          dotnet publish HudManagerOverlay/HudManagerOverlay.csproj `
+            -c Release -r win-x64 --self-contained true `
+            -o publish
+
+      - name: Zip the published output
+        shell: pwsh
+        run: |
+          $zipName = "HudManagerOverlay-${{ steps.ver.outputs.tag }}-win-x64.zip"
+          Compress-Archive -Path publish\* -DestinationPath $zipName
+          "zip=$zipName" >> $env:GITHUB_OUTPUT
+        id: zip
+
+      - name: Publish draft release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          TAG="${{ steps.ver.outputs.tag }}"
+          DRAFT_FLAG=""
+          if [ "${{ github.event.inputs.draft }}" != "false" ]; then DRAFT_FLAG="--draft"; fi
+          if ! gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release create "$TAG" --repo "${{ github.repository }}" $DRAFT_FLAG \
+              --title "$TAG" \
+              --notes "Native overlay build $TAG — self-contained, UNSIGNED (SmartScreen will warn). No installer yet, just a zipped standalone exe."
+          fi
+          gh release upload "$TAG" --repo "${{ github.repository }}" --clobber \
+            "${{ steps.zip.outputs.zip }}"
+          echo "Uploaded ${{ steps.zip.outputs.zip }} to ${{ github.repository }} @ $TAG (draft=${{ github.event.inputs.draft }})"

@@ -9,6 +9,18 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>app.ico</ApplicationIcon>
+
+    <!-- Publish settings for a distributable build — end users won't have the .NET 8 runtime
+         installed, so this must be self-contained. Single-file + ReadyToRun keeps startup fast
+         despite bundling the runtime. Not yet wired into CI/an installer/code signing/auto-update
+         — this is step one (a build a real user's machine can actually run), not the full
+         pipeline. See PROGRESS.md "Not started" for what's still open. -->
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
   <ItemGroup>

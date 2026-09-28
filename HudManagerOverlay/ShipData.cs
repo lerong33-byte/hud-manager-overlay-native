@@ -111,9 +111,16 @@ internal static class ShipData
     {
         var path = Path.Combine(AppContext.BaseDirectory, "Data", "ships.json");
         var json = File.ReadAllText(path);
-        var dict = JsonSerializer.Deserialize<Dictionary<string, Ship>>(json)
-                   ?? new Dictionary<string, Ship>();
-        return dict.Values
+
+        // Deserialize as JsonElement first and skip non-object entries rather than crash the
+        // whole Ship Loadout Bay on one — the same defensive pattern applied to AcquisitionData
+        // after a stray comment-string key took down that panel. ships.json has none today, but
+        // it's the same Dictionary<string, T> shape from the same data pipeline.
+        var raw = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json) ?? new();
+        return raw.Values
+            .Where(v => v.ValueKind == JsonValueKind.Object)
+            .Select(v => v.Deserialize<Ship>())
+            .OfType<Ship>()
             .Where(s => !string.IsNullOrWhiteSpace(s.Name))
             .OrderBy(s => s.Manufacturer)
             .ThenBy(s => s.Name)

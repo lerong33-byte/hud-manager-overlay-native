@@ -28,7 +28,12 @@ public sealed class Mission
 
 internal sealed class MissionDataFile
 {
-    [JsonPropertyName("buckets")] public Dictionary<string, List<Mission>> Buckets { get; set; } = new();
+    // JsonElement, not Dictionary<string, List<Mission>> directly — a stray non-array value under
+    // "buckets" (the same class of thing that crashed Acquisition: a comment string mixed into a
+    // dictionary meant to hold only real entries) would otherwise crash the whole Missions panel.
+    // None exists in missions.json today, but ships.json/recipes.json/acquisition.json are all the
+    // same data pipeline and acquisition.json already had one.
+    [JsonPropertyName("buckets")] public Dictionary<string, JsonElement> Buckets { get; set; } = new();
 }
 
 internal static class MissionData
@@ -43,7 +48,9 @@ internal static class MissionData
         var filtered = new Dictionary<string, List<Mission>>();
         foreach (var kvp in file.Buckets)
         {
-            filtered[kvp.Key] = kvp.Value
+            if (kvp.Value.ValueKind != JsonValueKind.Array) continue;
+            var missions = kvp.Value.Deserialize<List<Mission>>() ?? new List<Mission>();
+            filtered[kvp.Key] = missions
                 .Where(m => !string.IsNullOrWhiteSpace(m.Title))
                 .ToList();
         }

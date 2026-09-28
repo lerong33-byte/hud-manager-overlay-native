@@ -1,17 +1,28 @@
-name: Build native overlay (self-contained, unsigned)
+name: Build native overlay (installer, unsigned)
 
-# Builds a self-contained single-file HudManagerOverlay.exe (no .NET runtime required on the
-# user's machine) and publishes it as a draft GitHub release on THIS repo, tagged vX.Y.Z from
+# Builds a real Velopack installer (Setup.exe + portable zip + update package) for the
+# self-contained single-file HudManagerOverlay.exe (no .NET runtime required on the user's
+# machine) and publishes it as a draft GitHub release on THIS repo, tagged vX.Y.Z from
 # HudManagerOverlay.csproj's <Version>.
 #
+# Verified locally 2026-09-28: `vpk pack` produces a Setup.exe that installs to
+# %LocalAppData%\HudManagerOverlay\current, creates a real desktop shortcut, and registers a
+# proper "Programs and Features" uninstall entry. That local run hit a Bitdefender false-positive
+# on the generated (unsigned) execution stub — a GitHub-hosted runner has no third-party AV, so
+# this should not recur here, but if this job ever fails with an access-denied error on a file
+# under a temp path, that's almost certainly the same class of issue on whatever runner image
+# picked it up.
+#
 # NOT YET DONE (see PROGRESS.md "Not started" for the full list):
-#   - Code signing. The exe is unsigned — Windows SmartScreen will warn on first run. The
-#     Electron overlay (hud-manager-overlay-src) signs via Azure Trusted Signing; wiring the same
-#     service up for this repo needs the AZURE_TENANT_ID / AZURE_CLIENT_ID / AZURE_CLIENT_SECRET
-#     secrets added here (they're scoped per-repo, not shared automatically).
-#   - A real installer (MSI/Inno Setup/Squirrel/Velopack) — this ships the raw .exe as a zip,
-#     not something that installs itself, adds a Start Menu entry, or auto-updates.
-#   - Auto-update client logic — the exe has no built-in "check for updates" behavior yet.
+#   - Code signing. The exe and installer are unsigned — Windows SmartScreen will warn on first
+#     run, and this is also why AV heuristics flag the generated stub (see above). The Electron
+#     overlay (hud-manager-overlay-src) signs via Azure Trusted Signing; wiring the same service
+#     up for this repo needs the AZURE_TENANT_ID / AZURE_CLIENT_ID / AZURE_CLIENT_SECRET secrets
+#     added here (they're scoped per-repo, not shared automatically).
+#   - Auto-update client logic — Velopack is wired into the app (VelopackApp.Build().Run() in
+#     App's constructor) and this workflow produces the update feed files (RELEASES,
+#     releases.win.json, the -full.nupkg), but nothing in the app itself calls
+#     UpdateManager.CheckForUpdatesAsync() yet, so it won't actually find/apply them.
 #
 # Defaults to a DRAFT release so a human verifies before anyone downloads it.
 
@@ -38,6 +49,9 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
+      - name: Install Velopack CLI (vpk)
+        run: dotnet tool install -g vpk
+
       - name: Resolve version + tag
         id: ver
         shell: pwsh
@@ -55,13 +69,19 @@ jobs:
             -c Release -r win-x64 --self-contained true `
             -o publish
 
-      - name: Zip the published output
+      - name: Package installer (vpk)
         shell: pwsh
         run: |
-          $zipName = "HudManagerOverlay-${{ steps.ver.outputs.tag }}-win-x64.zip"
-          Compress-Archive -Path publish\* -DestinationPath $zipName
-          "zip=$zipName" >> $env:GITHUB_OUTPUT
-        id: zip
+          vpk pack `
+            --packId HudManagerOverlay `
+            --packVersion "${{ steps.ver.outputs.pkg }}" `
+            --packDir publish `
+            --packAuthors "H.U.D Manager" `
+            --packTitle "H.U.D Manager Overlay" `
+            --mainExe HudManagerOverlay.exe `
+            --icon HudManagerOverlay/app.ico `
+            --runtime win-x64 `
+            --outputDir Releases
 
       - name: Publish draft release
         shell: bash
@@ -75,8 +95,12 @@ jobs:
           if ! gh release view "$TAG" --repo "${{ github.repository }}" >/dev/null 2>&1; then
             gh release create "$TAG" --repo "${{ github.repository }}" $DRAFT_FLAG \
               --title "$TAG" \
-              --notes "Native overlay build $TAG — self-contained, UNSIGNED (SmartScreen will warn). No installer yet, just a zipped standalone exe."
+              --notes "Native overlay installer $TAG — UNSIGNED (SmartScreen + some antivirus will warn on the generated stub until code signing is set up). Run HudManagerOverlay-win-Setup.exe to install."
           fi
           gh release upload "$TAG" --repo "${{ github.repository }}" --clobber \
-            "${{ steps.zip.outputs.zip }}"
-          echo "Uploaded ${{ steps.zip.outputs.zip }} to ${{ github.repository }} @ $TAG (draft=${{ github.event.inputs.draft }})"
+            Releases/HudManagerOverlay-win-Setup.exe \
+            Releases/HudManagerOverlay-win-Portable.zip \
+            "Releases/HudManagerOverlay-${{ steps.ver.outputs.pkg }}-full.nupkg" \
+            Releases/RELEASES \
+            Releases/releases.win.json
+          echo "Uploaded installer + update feed to ${{ github.repository }} @ $TAG (draft=${{ github.event.inputs.draft }})"

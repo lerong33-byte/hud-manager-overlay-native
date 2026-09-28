@@ -35,6 +35,14 @@ public sealed class ComponentSlotDisplay
     public string SelectedName { get; set; } = "";
 }
 
+// Radar / life support: no compatibility catalog exists for either (no erkul source data, and
+// both are rarely swapped in practice) — shown as plain read-only rows instead of a picker.
+public sealed class ReadOnlyPartDisplay
+{
+    public string Label { get; init; } = "";
+    public string PartName { get; init; } = "";
+}
+
 public partial class ShipDetailView : UserControl
 {
     private string _currentShipName = "";
@@ -136,9 +144,32 @@ public partial class ShipDetailView : UserControl
             components.AddRange(BuildComponentGroup("Shield Generator", "sg", ship.Comps.Shields, ShieldCatalog.NamesForSize, saved));
             components.AddRange(BuildComponentGroup("Cooler", "cooler", ship.Comps.Coolers, CoolerCatalog.NamesForSize, saved));
             components.AddRange(BuildComponentGroup("Quantum Drive", "qd", ship.Comps.QuantumDrives, QuantumDriveCatalog.NamesForSize, saved));
+            components.AddRange(BuildComponentGroup("Flight Controller", "flight", ship.Comps.FlightControllers, FlightControllerCatalog.NamesForSize, saved));
         }
         ComponentList.ItemsSource = components;
         ComponentHeader.Visibility = components.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
+        var readOnlyParts = new List<ReadOnlyPartDisplay>();
+        if (ship.Comps != null)
+        {
+            readOnlyParts.AddRange(BuildReadOnlyGroup("Radar", ship.Comps.Radar));
+            readOnlyParts.AddRange(BuildReadOnlyGroup("Life Support", ship.Comps.LifeSupport));
+        }
+        ReadOnlyPartList.ItemsSource = readOnlyParts;
+        ReadOnlyPartHeader.Visibility = readOnlyParts.Count > 0 ? Visibility.Visible : Visibility.Collapsed;
+    }
+
+    private static List<ReadOnlyPartDisplay> BuildReadOnlyGroup(string displayName, List<ComponentPart> parts)
+    {
+        var result = new List<ReadOnlyPartDisplay>();
+        for (int i = 0; i < parts.Count; i++)
+        {
+            var name = parts[i].Name;
+            if (string.IsNullOrEmpty(name)) continue; // unused placeholder slot
+            var label = parts.Count > 1 ? $"{displayName} {i + 1}" : displayName;
+            result.Add(new ReadOnlyPartDisplay { Label = label, PartName = name });
+        }
+        return result;
     }
 
     private static WeaponSlotDisplay BuildGunRow(string label, int size, bool gimbal, bool isFixed, string? defaultName, ShipLoadoutChoice saved)

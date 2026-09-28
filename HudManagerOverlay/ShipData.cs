@@ -77,6 +77,12 @@ public sealed class ShipComponents
     [JsonPropertyName("sg")] public List<ComponentPart> Shields { get; set; } = new();
     [JsonPropertyName("cooler")] public List<ComponentPart> Coolers { get; set; } = new();
     [JsonPropertyName("qd")] public List<ComponentPart> QuantumDrives { get; set; } = new();
+    [JsonPropertyName("flight")] public List<ComponentPart> FlightControllers { get; set; } = new();
+    // Radar and life support have no swap catalog (no erkul source data for either — both are
+    // rarely customized in practice) so they're read-only display, not part of ShipComponents'
+    // editable set the way the above 5 are.
+    [JsonPropertyName("radar")] public List<ComponentPart> Radar { get; set; } = new();
+    [JsonPropertyName("lifesupport")] public List<ComponentPart> LifeSupport { get; set; } = new();
 }
 
 public sealed class Ship

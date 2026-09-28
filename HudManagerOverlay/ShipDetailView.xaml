@@ -21,6 +21,33 @@
             <Setter Property="Foreground" Value="{StaticResource Amber}"/>
             <Setter Property="Margin" Value="0,10,0,4"/>
         </Style>
+
+        <!-- ComboBox's own Background/Foreground only style the closed box — the dropdown popup's
+             items fall back to the default white background, and with Foreground="White" set on
+             the ComboBox (inherited down into the popup) that made every option unreadable: white
+             text on a white row. ItemContainerStyle is what actually styles the popup rows. -->
+        <Style x:Key="DarkComboItem" TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="#1A2530"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="Padding" Value="6,4"/>
+            <Style.Triggers>
+                <Trigger Property="IsHighlighted" Value="True">
+                    <Setter Property="Background" Value="{StaticResource Amber}"/>
+                    <Setter Property="Foreground" Value="#1A2530"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DarkCombo" TargetType="ComboBox">
+            <Setter Property="Background" Value="#1A2530"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderBrush" Value="{StaticResource TextDim}"/>
+            <Setter Property="Margin" Value="0,2,0,0"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboItem}"/>
+        </Style>
     </UserControl.Resources>
 
     <Border Background="#1A2530" BorderBrush="{StaticResource Cyan}" BorderThickness="1,0,0,0" Padding="12,8">
@@ -145,9 +172,7 @@
                                             <Run Text="{Binding MountKind}"/>
                                         </TextBlock>
                                         <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedName, Mode=TwoWay}"
-                                                  SelectionChanged="WeaponCombo_SelectionChanged"
-                                                  Background="#1A2530" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"
-                                                  BorderBrush="{StaticResource TextDim}" Margin="0,2,0,0"/>
+                                                  SelectionChanged="WeaponCombo_SelectionChanged" Style="{StaticResource DarkCombo}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -162,9 +187,7 @@
                                     <StackPanel>
                                         <TextBlock FontFamily="Consolas" FontSize="10" Foreground="{StaticResource TextDim}" Text="{Binding Label}"/>
                                         <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedName, Mode=TwoWay}"
-                                                  SelectionChanged="MissileCombo_SelectionChanged"
-                                                  Background="#1A2530" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"
-                                                  BorderBrush="{StaticResource TextDim}" Margin="0,2,0,0"/>
+                                                  SelectionChanged="MissileCombo_SelectionChanged" Style="{StaticResource DarkCombo}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
@@ -179,9 +202,7 @@
                                     <StackPanel>
                                         <TextBlock FontFamily="Consolas" FontSize="10" Foreground="{StaticResource TextDim}" Text="{Binding Label}"/>
                                         <ComboBox ItemsSource="{Binding Options}" SelectedItem="{Binding SelectedName, Mode=TwoWay}"
-                                                  SelectionChanged="ComponentCombo_SelectionChanged"
-                                                  Background="#1A2530" Foreground="White" FontFamily="Consolas" FontSize="12" FontWeight="Bold"
-                                                  BorderBrush="{StaticResource TextDim}" Margin="0,2,0,0"/>
+                                                  SelectionChanged="ComponentCombo_SelectionChanged" Style="{StaticResource DarkCombo}"/>
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
